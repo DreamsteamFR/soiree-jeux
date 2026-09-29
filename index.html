@@ -110,6 +110,7 @@ button:disabled{opacity:.4;cursor:not-allowed}
 .mc2{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:12px;padding:6px;margin-bottom:8px;display:flex;flex-direction:column;gap:3px}
 .ti2{position:relative;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#2a2650}
 .ti2.ph::after{font-size:1.3rem}
+.rtb{position:absolute;left:4px;bottom:4px;background:rgba(0,0,0,.68);color:#ffd76a;font-size:.7rem;font-weight:700;border-radius:6px;padding:1px 6px}
 .mcb{position:absolute;top:4px;right:4px}.mcb .mc{font-size:.7rem;padding:1px 6px}
 .mc2 b{font-size:.8rem;line-height:1.15;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .mc2 small{font-size:.7rem;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -120,7 +121,7 @@ button:disabled{opacity:.4;cursor:not-allowed}
 #trfab{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:10;box-shadow:0 10px 30px -6px rgba(139,108,255,.7);border-radius:999px;padding:13px 22px;white-space:nowrap}
 #trbk{display:none}
 @media(min-width:1240px){
-  .with-tr #tr{position:fixed;left:0;top:0;bottom:0;width:min(calc((100vw - 480px)/2 - 14px),760px);padding:calc(16px + env(safe-area-inset-top,0px)) 6px 16px 12px;z-index:5}
+  .with-tr #tr{position:fixed;left:0;top:0;bottom:0;width:min(calc((100vw - 480px)/2 - 32px),400px);padding:calc(16px + env(safe-area-inset-top,0px)) 6px 16px 12px;z-index:5}
   #trfab,#trx{display:none!important}
 }
 @media(max-width:1239px){
@@ -393,36 +394,27 @@ function getDesc(rid,cb){
 }
 
 var trData=null,trLoading=false,trErr='',trVer=0,trSig='',trUI=ld('sj3-tr-ui')||{},WIDE=window.matchMedia?window.matchMedia('(min-width:1240px)'):{matches:false};
-var TRC=[{k:'new',t:'Nouveautés multi',d:'Sorties des 3 derniers mois, les plus ajoutées d’abord.',days:90,ord:'-added',sort:'pop'},
- {k:'pop',t:'Populaires de l’année',d:'Les jeux multi les plus ajoutés sur RAWG ces 12 mois.',days:365,ord:'-added',sort:'pop'},
- {k:'top',t:'Mieux notés',d:'',sort:'mc'}];
-var TOPD=[365,730,1095];
+var TRC=[{k:'new',t:'Nouveautés multis',d:'Multijoueur, sortis ces 30 derniers jours.',days:30,ord:'-added',sort:'pop'},
+ {k:'pop',t:'Jeux multis populaires de l’année',d:'Multijoueur, sortis depuis le 1er janvier.',ytd:true,ord:'-added',sort:'pop'}];
+var SORTS=[['pop','Popularité'],['rt','Note moyenne'],['rec','Date de sortie'],['az','Nom']];
 function trU(k){var u=trUI[k]=trUI[k]||{};if(!u.sort)u.sort=TRC.filter(function(c){return c.k===k})[0].sort;return u}
 function dstr(d){return d.toISOString().slice(0,10)}
 function imgTag(x,w,h){return'<img src="'+thumb(x.i,w,h).replace(/[()]/g,'')+'" data-o="'+esc(String(x.i).replace(/["\'<>\s()]/g,''))+'" alt="" loading="lazy" onerror="if(!this.dataset.f&&this.dataset.o){this.dataset.f=1;this.src=this.dataset.o}else{this.parentNode.classList.add(\'ph\');this.remove()}">'}
 function trFetch(c){
-  var u='https://api.rawg.io/api/games?key='+encodeURIComponent(RAWG_KEY)+'&tags=multiplayer&dates='+dstr(new Date(Date.now()-c.days*864e5))+','+dstr(new Date())+'&ordering='+c.ord+(c.mc?'&metacritic='+c.mc:'')+'&page_size=40';
+  var u='https://api.rawg.io/api/games?key='+encodeURIComponent(RAWG_KEY)+'&tags=multiplayer&dates='+dstr(c.ytd?new Date(new Date().getFullYear()+'-01-01T00:00:00Z'):new Date(Date.now()-c.days*864e5))+','+dstr(new Date())+'&ordering='+c.ord+(c.mc?'&metacritic='+c.mc:'')+'&page_size=40';
   return fetch(u).then(function(r){if(!r.ok)throw new Error('http');return r.json()}).then(function(d){
-    return(d.results||[]).filter(function(x){return x.background_image&&!(x.esrb_rating&&x.esrb_rating.slug==='adults-only')}).slice(0,30).map(function(x,i){
-      return{n:x.name,r:x.id,m:x.metacritic||null,i:x.background_image,y:(x.released||'').slice(0,4),rel:x.released||'',gs:(x.genres||[]).map(function(g){return g.name}),o:i}})})
-}
-function trTop(i,best){
-  i=i||0;
-  return trFetch({days:TOPD[i],ord:'-metacritic',mc:'1,100'}).then(function(l){
-    l=l.filter(function(x){return x.m}).sort(function(a,b){return b.m-a.m||a.o-b.o});
-    var cu={l:l,days:TOPD[i]};if(!best||l.length>best.l.length)best=cu;
-    if(best.l.length>=8||i>=TOPD.length-1)return best;
-    return trTop(i+1,best)})
+    return(d.results||[]).filter(function(x){return x.background_image&&!(x.esrb_rating&&x.esrb_rating.slug==='adults-only')}).slice(0,40).map(function(x,i){
+      return{n:x.name,r:x.id,m:x.metacritic||null,i:x.background_image,y:(x.released||'').slice(0,4),rel:x.released||'',rt:x.rating||0,gs:(x.genres||[]).map(function(g){return g.name}),o:i}})})
 }
 function trLoad(){
-  if(trLoading||trData)return;var c=ld('sj3-trend2'),day=dstr(new Date());
-  if(c&&c.day===day&&Date.now()-c.t<432e5&&c.d&&c.d.new&&c.d.pop&&c.d.top){trData=c.d;trVer++;return}
+  if(trLoading||trData)return;var c=ld('sj3-trend4'),day=dstr(new Date());
+  if(c&&c.day===day&&Date.now()-c.t<432e5&&c.d&&c.d.new&&c.d.pop){trData=c.d;trVer++;return}
   trLoading=true;trErr='';trVer++;
   function safe(p){return p.catch(function(){return null})}
-  Promise.all([safe(trFetch(TRC[0])),safe(trFetch(TRC[1])),safe(trTop())]).then(function(r){
+  Promise.all([safe(trFetch(TRC[0])),safe(trFetch(TRC[1]))]).then(function(r){
     trLoading=false;
-    if(!r[0]&&!r[1]&&!r[2]){trErr='Impossible de charger les jeux du moment.'}
-    else{trData={new:r[0]||[],pop:r[1]||[],top:r[2]?r[2].l:[],topDays:r[2]?r[2].days:365};if(r[0]&&r[1]&&r[2])sv('sj3-trend2',{day:day,t:Date.now(),d:trData})}
+    if(!r[0]&&!r[1]){trErr='Impossible de charger les jeux du moment.'}
+    else{trData={new:r[0]||[],pop:r[1]||[]};if(r[0]&&r[1])sv('sj3-trend4',{day:day,t:Date.now(),d:trData})}
     trVer++;trSync()})
 }
 function mineKeys(){var m=mine();return m&&m.round===rnd()?m.games.map(gkey).join('|'):''}
@@ -438,7 +430,7 @@ function trSync(){
   if(sg!==trSig){trSig=sg;trRender()}
 }
 function trRender(){
-  var tr=document.getElementById('tr'),st=tr.scrollTop,sc={},have={},wide=WIDE.matches,tab=trUI.tab||'new';
+  var tr=document.getElementById('tr'),st=tr.scrollTop,sc={},have={},wide=WIDE.matches,tab=TRC.some(function(c){return c.k===trUI.tab})?trUI.tab:'new';
   tr.querySelectorAll('.clist').forEach(function(e){sc[e.dataset.c]=e.scrollTop});
   var m0=mine();((m0&&m0.round===rnd())?m0.games:[]).forEach(function(g){have[gkey(g)]=1;have['t'+String(g.n).toLowerCase()]=1});
   var h='<div class="trh"><h2>🔥 Jeux multi du moment</h2><button class="ghost" id="trx" aria-label="Fermer">✕</button></div>';
@@ -453,17 +445,20 @@ function trRender(){
       all.forEach(function(x){x.gs.forEach(function(g){gset[g]=1})});
       var gl=Object.keys(gset).sort(function(a,b){return a.localeCompare(b,'fr')});
       if(u.genre&&!gset[u.genre])u.genre='';
+      var so=SORTS;
+      if(!so.some(function(o){return o[0]===u.sort}))u.sort=c.sort;
       var l=all.filter(function(x){return!u.genre||x.gs.indexOf(u.genre)>=0});
       if(u.sort==='mc')l.sort(function(a,b){return(b.m||-1)-(a.m||-1)||a.o-b.o});
+      else if(u.sort==='rt')l.sort(function(a,b){return(b.rt||0)-(a.rt||0)||a.o-b.o});
       else if(u.sort==='az')l.sort(function(a,b){return a.n.localeCompare(b.n,'fr')});
       else if(u.sort==='rec')l.sort(function(a,b){return b.rel<a.rel?-1:b.rel>a.rel?1:a.o-b.o});
       else l.sort(function(a,b){return a.o-b.o});
-      var d=c.k==='top'?(trData.topDays===365?'Notés sur Metacritic, ces 12 mois.':'Peu de scores récents : élargi à '+(trData.topDays===730?'2':'3')+' ans.'):c.d;
-      var body=l.map(function(x){var ad=have['r'+x.r]||have['t'+x.n.toLowerCase()];return'<div class="mc2"><div class="ti2" data-i="'+esc(x.n.charAt(0).toUpperCase())+'" style="background:hsl('+hue(x.n)+',55%,32%)">'+imgTag(x,320,180)+(x.m?'<span class="mcb">'+mcBadge(x.m)+'</span>':'')+'</div><b>'+esc(x.n)+'</b><small>'+esc(x.gs.slice(0,2).join(', ')||'Multijoueur')+(x.y?' · '+esc(x.y):'')+'</small><button data-a="'+c.k+':'+x.r+'"'+(ad?' disabled':'')+'>'+(ad?'Ajouté ✓':'+ Ajouter')+'</button></div>'}).join('');
-      if(!body)body='<p class="emp">'+(!raw.length?(c.k==='top'?'Aucun jeu multi noté sur Metacritic trouvé.':'Aucun jeu trouvé.'):'Aucun jeu ne correspond.')+'</p>';
+      var d=c.d;
+      var body=l.map(function(x){var ad=have['r'+x.r]||have['t'+x.n.toLowerCase()];return'<div class="mc2"><div class="ti2" data-i="'+esc(x.n.charAt(0).toUpperCase())+'" style="background:hsl('+hue(x.n)+',55%,32%)">'+imgTag(x,320,180)+(x.m?'<span class="mcb">'+mcBadge(x.m)+'</span>':'')+(x.rt>0?'<span class="rtb">★ '+x.rt.toFixed(1)+'</span>':'')+'</div><b>'+esc(x.n)+'</b><small>'+esc(x.gs.slice(0,2).join(', ')||'Multijoueur')+(x.y?' · '+esc(x.y):'')+'</small><button data-a="'+c.k+':'+x.r+'"'+(ad?' disabled':'')+'>'+(ad?'Ajouté ✓':'+ Ajouter')+'</button></div>'}).join('');
+      if(!body)body='<p class="emp">'+(!raw.length?'Aucun jeu trouvé.':'Aucun jeu ne correspond.')+'</p>';
       cols+='<section class="col'+(tab===c.k?' act':'')+'"><div class="colh"><b>'+esc(c.t)+'</b><small>'+all.length+'</small></div><p class="cdesc">'+esc(d)+'</p><div class="ctl2">'+
         (gl.length?'<select data-g="'+c.k+'" aria-label="Filtrer par genre"><option value="">Tous les genres</option>'+gl.map(function(g){return'<option value="'+esc(g)+'"'+(u.genre===g?' selected':'')+'>'+esc(g)+'</option>'}).join('')+'</select>':'')+
-        '<select data-s="'+c.k+'" aria-label="Trier">'+[['pop','Popularité'],['mc','Metacritic'],['az','A → Z'],['rec','Plus récents']].map(function(o){return'<option value="'+o[0]+'"'+(u.sort===o[0]?' selected':'')+'>'+o[1]+'</option>'}).join('')+'</select></div><div class="clist" data-c="'+c.k+'">'+body+'</div></section>'});
+        '<select data-s="'+c.k+'" aria-label="Trier">'+so.map(function(o){return'<option value="'+o[0]+'"'+(u.sort===o[0]?' selected':'')+'>'+o[1]+'</option>'}).join('')+'</select></div><div class="clist" data-c="'+c.k+'">'+body+'</div></section>'});
     h+='<div class="cols" style="--n:'+Math.max(ns,1)+'">'+(cols||'<p class="emp">Toutes les catégories sont masquées.</p>')+'</div>';
   }
   tr.innerHTML=h;tr.scrollTop=st;
