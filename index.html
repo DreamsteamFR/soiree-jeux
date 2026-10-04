@@ -123,12 +123,13 @@ button:disabled{opacity:.4;cursor:not-allowed}
 .mc2 button:disabled{opacity:1;background:rgba(43,229,154,.15);color:var(--yes);border:1px solid var(--yes)}
 .priv{font-size:.85rem;margin:-2px 0 12px}
 .emp{font-size:.8rem;color:var(--mute);margin:4px 2px}
-#trfab{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:10;box-shadow:0 10px 30px -6px rgba(139,108,255,.7);border-radius:999px;padding:13px 22px;white-space:nowrap}
+#fabs{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:10;display:flex;gap:8px}
+#fabs button{box-shadow:0 10px 30px -6px rgba(139,108,255,.7);border-radius:999px;padding:12px 14px;font-size:.95rem;white-space:nowrap}
 #trbk{display:none}
 @media(min-width:1240px){
   .with-tr #tr{position:fixed;left:0;top:0;bottom:0;width:min(calc((100vw - 480px)/2 - 20px),540px);padding:calc(16px + env(safe-area-inset-top,0px)) 4px 16px 10px;z-index:5}
   .cols{gap:10px}.col{padding:10px}.colh b{font-size:.95rem}.cdesc{font-size:.78rem}.mc2{padding:8px}.mc2 b{font-size:.9rem}.mc2 small{font-size:.76rem}.mc2 button{font-size:.84rem;padding:7px}
-  #trfab,#trx{display:none!important}
+  #fabs,#trx,#sgx{display:none!important}
 }
 @media(max-width:1239px){
   .with-tr #tr{position:fixed;left:0;right:0;bottom:0;top:7vh;z-index:30;background:#100e24;border-radius:24px 24px 0 0;border:1.5px solid var(--line);overflow-y:auto;padding:16px 14px calc(30px + env(safe-area-inset-bottom,0px));transform:translateY(105%);visibility:hidden;transition:transform .28s,visibility 0s .28s;box-shadow:0 -20px 60px rgba(0,0,0,.6)}
@@ -157,11 +158,57 @@ button:disabled{opacity:.4;cursor:not-allowed}
 .pn{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:.9rem;margin:2px 4px 2px 0;color:var(--ink)}
 .kick{padding:2px 9px;font-size:.75rem;background:rgba(255,77,125,.18);color:#ffb3cd;border:1px solid var(--no);border-radius:999px}
 .undoRow{display:flex;justify-content:center;margin-top:14px}.undoRow button{padding:9px 16px;font-size:.9rem}
+#sgp{display:none}
+.with-sg #sgp{display:flex;flex-direction:column;gap:10px}
+.sgl{display:flex;flex-direction:column;gap:10px}
+.grpb{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:10px}
+.grpb h3{margin:0 0 8px;font-size:.92rem;font-weight:600;color:var(--mute);line-height:1.3}.grpb h3 b{color:var(--ink)}
+.row3{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+.row3 .mc2{margin:0}.row3 .mc2>button:last-child{margin-top:auto}
+.mc2 small.why{color:var(--acc2);white-space:normal}
+.sgempty{font-size:.95rem;padding:16px;border:1.5px dashed var(--line);border-radius:14px;text-align:center;color:var(--mute);margin:4px 0}
+@media(min-width:1240px){
+  .with-sg #sgp{position:fixed;right:0;top:0;bottom:0;width:min(calc((100vw - 480px)/2 - 20px),540px);padding:calc(16px + env(safe-area-inset-top,0px)) 10px 16px 4px;z-index:5;overflow:hidden}
+  .sgl{overflow-y:auto;flex:1;min-height:0;scrollbar-width:thin;padding-right:2px}
+}
+@media(max-width:1239px){
+  .with-sg #sgp{position:fixed;left:0;right:0;bottom:0;top:7vh;z-index:30;background:#100e24;border-radius:24px 24px 0 0;border:1.5px solid var(--line);overflow-y:auto;padding:16px 14px calc(30px + env(safe-area-inset-bottom,0px));transform:translateY(105%);visibility:hidden;transition:transform .28s,visibility 0s .28s;box-shadow:0 -20px 60px rgba(0,0,0,.6)}
+  .with-sg #sgp.open{transform:none;visibility:visible;transition:transform .28s}
+  .row3{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(min-width:700px) and (max-width:1239px){.row3{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.intro{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px));background:rgba(5,5,12,.72);backdrop-filter:blur(6px);animation:inFade .2s ease}
+.intro[hidden]{display:none}
+.ibox{position:relative;width:100%;max-width:460px;max-height:100%;overflow-y:auto;background:#14132a;border:1.5px solid var(--line);border-radius:24px;padding:26px 22px 22px;box-shadow:0 30px 80px -20px rgba(0,0,0,.8),0 0 0 1px rgba(139,108,255,.25);animation:inPop .25s ease}
+.ibox h2{margin:0 36px 6px 0;font-size:1.5rem}
+.ibox>p{margin-bottom:18px}
+.ix{position:absolute;top:12px;right:12px;width:38px;height:38px;padding:0;border-radius:50%;font-size:1.1rem;line-height:1}
+.istep{display:flex;gap:14px;margin-bottom:16px}
+.istep .in{flex:none;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#0a0a14;background:linear-gradient(135deg,var(--acc),var(--acc2))}
+.istep h3{margin:4px 0 4px;font-size:1.05rem}
+.istep p{margin:0;font-size:.95rem}.istep p b{color:var(--ink)}
+.ibox .foot{margin-top:8px}
+.hlp{padding:7px 12px;font-size:1rem}
+@keyframes inFade{from{opacity:0}to{opacity:1}}
+@keyframes inPop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.intro,.ibox{animation:none}}
 </style>
 </head>
 <body>
 <div class="shell" id="shell"><aside id="tr" aria-label="Jeux multi du moment"></aside><main id="app"></main></div>
-<div id="trbk"></div><button id="trfab" hidden>🔥 Jeux du moment</button>
+<aside id="sgp" aria-label="Suggestions personnalisées"></aside>
+<div id="trbk"></div><div id="fabs"><button id="trfab" hidden>🔥 Jeux du moment</button><button id="sgfab" hidden>✨ Suggestions</button></div>
+<div class="intro" id="intro" hidden role="dialog" aria-modal="true" aria-labelledby="introT">
+<div class="ibox">
+<button class="ghost ix" id="introX" aria-label="Fermer">✕</button>
+<h2 id="introT">🎮 Bienvenue !</h2>
+<p>Fini les débats interminables pour choisir à quoi jouer ce soir.</p>
+<div class="istep"><span class="in">1</span><div><h3>Propose tes jeux</h3><p>Chacun ajoute les jeux auxquels il a envie de jouer. Les propositions des autres restent secrètes jusqu’au vote. En panne d’inspiration ? Le panneau <b>« Jeux multi du moment »</b> présente les jeux multis les plus marquants des 12 derniers mois et les sorties des 2 derniers mois. Pioches-y ou propose tes propres idées. Une fois ta liste terminée, coche la case <b>« Prêt à lancer les swipes »</b>.</p></div></div>
+<div class="istep"><span class="in">2</span><div><h3>Vote</h3><p>Quand tout le monde est prêt, les jeux défilent un par un : donne ton avis sur chacun d’eux.</p></div></div>
+<div class="istep"><span class="in">3</span><div><h3>Le verdict</h3><p>Si tout le monde swipe le même jeu, c’est un match ! Sinon, un classement des préférences du groupe s’affiche.</p></div></div>
+<div class="foot"><button id="introGo">C’est parti</button></div>
+</div>
+</div>
 <footer class="attr">Données des jeux : <a href="https://rawg.io" target="_blank" rel="noopener">RAWG</a> (autocomplétion) · Panneau latéral : <a href="https://store.steampowered.com" target="_blank" rel="noopener">Steam</a> (liste au 1er octobre 2026)</footer>
 <script>
 /* ===== CONFIGURATION : remplace par l'adresse de ta Realtime Database Firebase ===== */
@@ -268,7 +315,7 @@ function draw(){
   var b=document.getElementById('lv');if(b)b.onclick=function(){leave()};
 }
 function joinView(st){
-  app.innerHTML='<div class="hero"><div><h1>On joue<br>à quoi ?</h1></div>'+sndBtn()+'</div><p>Chacun swipe ses envies, on trouve le jeu de la soirée.</p>'+st+
+  app.innerHTML='<div class="hero"><div><h1>On joue<br>à quoi ?</h1></div><span class="grp">'+sndBtn()+'</span></div><p>Chacun swipe ses envies, on trouve le jeu de la soirée.</p>'+st+
   '<div class="fld"><label for="nm">Ton prénom</label><input id="nm" maxlength="20" value="'+esc(me.name)+'" autocomplete="off"></div>'+
   (jm?'<div class="fld"><label for="cd">Code de la soirée</label><input id="cd" maxlength="4" placeholder="ABCD" value="'+esc(pendCode)+'" autocomplete="off" style="text-transform:uppercase"></div><div class="foot"><button id="jn">Rejoindre</button><button class="ghost" id="bk">Retour</button></div>'
      :'<div class="foot"><button id="jm">Rejoindre une soirée</button><button class="ghost" id="cr">Créer une soirée</button></div>');
@@ -390,7 +437,7 @@ var SFX={
 };
 function sfx(n){try{SFX[n]()}catch(e){}}
 function once(k,n){if(onceK!==k){onceK=k;sfx(n)}}
-function sndBtn(){return'<button class="ghost snd" id="snd" aria-label="'+(sndOn?'Couper le son':'Activer le son')+'">'+(sndOn?'🔊':'🔇')+'</button>'}
+function sndBtn(){return'<button class="ghost hlp" data-hlp="1" aria-label="Comment ça marche ?" title="Comment ça marche ?">?</button>'+'<button class="ghost snd" id="snd" aria-label="'+(sndOn?'Couper le son':'Activer le son')+'">'+(sndOn?'🔊':'🔇')+'</button>'}
 function toggleSnd(){sndOn=!sndOn;sv('sj3-snd',sndOn);if(sndOn)sfx('tick');render()}
 function matchCheck(){if(!room)return;var n=room.phase==='swipe'?matches().length:0;if(n>matchN)sfx('match');matchN=n}
 function autoStart(){
@@ -449,12 +496,15 @@ function trLoad(){
   trData={new:all.filter(function(x){return x.f!=='p'}),pop:all.filter(function(x){return x.f!=='n'})};trVer++;
 }
 function mineKeys(){var m=mine();return m&&m.round===rnd()?m.games.map(gkey).join('|'):''}
-function trClose(){var t=document.getElementById('tr'),b=document.getElementById('trbk');if(t)t.classList.remove('open');if(b)b.classList.remove('show')}
+function trClose(){var t=document.getElementById('tr'),b=document.getElementById('trbk'),q=document.getElementById('sgp');if(t)t.classList.remove('open');if(q)q.classList.remove('open');if(b)b.classList.remove('show')}
 function trOpen(){document.getElementById('tr').classList.add('open');document.getElementById('trbk').classList.add('show')}
 function trSync(){
   var on=configured&&hasRawg&&joined&&room&&room.phase==='games';
   document.getElementById('shell').classList.toggle('with-tr',!!on);
   document.getElementById('trfab').hidden=!on;
+  document.getElementById('sgfab').hidden=!on;
+  document.body.classList.toggle('with-sg',!!on);
+  if(on)sgSync();
   if(!on){trClose();return}
   if(!trData&&!trLoading&&!trErr)trLoad();
   var sg=JSON.stringify([trVer,mineKeys(),WIDE.matches]);
@@ -507,6 +557,88 @@ function trRender(){
 }
 if(WIDE.addEventListener)WIDE.addEventListener('change',function(){trSig='';trSync()});
 document.getElementById('trfab').onclick=trOpen;
+
+/* ===== Suggestions personnalisées (colonne de droite) ===== */
+var SGT={'survival':'Survie','crafting':'Craft','open-world':'Monde ouvert','horror':'Horreur','psychological-horror':'Horreur','survival-horror':'Horreur','roguelike':'Roguelike','roguelite':'Roguelite','pvp':'JcJ','battle-royale':'Battle royale','fps':'FPS','third-person-shooter':'TPS','sandbox':'Bac à sable','building':'Construction','base-building':'Construction','exploration':'Exploration','fantasy':'Fantasy','sci-fi':'Science-fiction','zombies':'Zombies','racing':'Course','sports':'Sport','football':'Foot','basketball':'Basket','tactical':'Tactique','party':'Party','party-game':'Party','physics':'Physique','funny':'Humour','comedy':'Humour','dungeon-crawler':'Dungeon crawler','loot':'Loot','hack-and-slash':'Hack and slash','automation':'Automatisation','management':'Gestion','vikings':'Vikings','viking':'Vikings','pirates':'Pirates','space':'Espace','post-apocalyptic':'Post-apo','investigation':'Enquête','detective':'Enquête','card-game':'Cartes','deckbuilding':'Deckbuilding','fighting':'Combat','platformer':'Plateforme','cooking':'Cuisine','farming':'Ferme','fishing':'Pêche','hunting':'Chasse','escape-room':'Escape game','mystery':'Mystère','heist':'Braquage','stealth':'Infiltration','extraction-shooter':'Extraction','looter-shooter':'Looter shooter','team-based':'En équipe','moba':'MOBA','rts':'STR','turn-based-strategy':'Tour par tour','city-builder':'City builder','driving':'Conduite','cars':'Voitures','medieval':'Médiéval','military':'Militaire','war':'Guerre','tower-defense':'Tower defense','mech':'Mechas','monsters':'Monstres','dragons':'Dragons','magic':'Magie','trivia':'Quiz','word-game':'Mots','drawing':'Dessin','social-deduction':'Déduction','asymmetric-multiplayer':'Asymétrique','souls-like':'Souls-like','action-rpg':'Action-RPG','looter':'Loot','sailing':'Navigation','underwater':'Sous-marin','cozy':'Cosy','cute':'Mignon','co-op-campaign':'Campagne coop','split-screen':'Écran partagé','local-co-op':'Coop locale'};
+var SGG={'action':'Action','adventure':'Aventure','role-playing-games-rpg':'RPG','shooter':'Tir','strategy':'Stratégie','puzzle':'Puzzle','racing':'Course','sports':'Sport','simulation':'Simulation','fighting':'Combat','platformer':'Plateforme','arcade':'Arcade','massively-multiplayer':'MMO','board-games':'Jeu de plateau','card':'Cartes','family':'Famille'};
+var SGMP=['multiplayer','co-op','cooperative','coop','online-co-op','local-co-op','online-multiplayer','local-multiplayer','pvp','online-pvp','split-screen','mmo','battle-royale','team-based','asymmetric-multiplayer','co-op-campaign'];
+var sgInfo={},sgSig='',sgInf={},sgDsc={},sgSeq=0;
+function sgOpen(){document.getElementById('sgp').classList.add('open');document.getElementById('trbk').classList.add('show')}
+function sgMine(){var m=mine();return(m&&m.round===rnd())?m.games:[]}
+function sgSl(a){return(a||[]).map(function(t){return t.slug})}
+function sgApi(q){return fetch('https://api.rawg.io/api/'+q+(q.indexOf('?')<0?'?':'&')+'key='+encodeURIComponent(RAWG_KEY)).then(function(r){if(!r.ok)throw 0;return r.json()})}
+function sgUpd(){sgSig='';sgSync()}
+function sgStart(x){
+  var k=gkey(x);if(sgInfo[k])return;var o=sgInfo[k]={st:'load',seq:++sgSeq,picks:null};
+  setTimeout(function(){if(o.st==='load'){o.st='err';sgUpd()}},15000);
+  function go(id){
+    if(o.st!=='load')return;
+    if(!id){o.st='none';sgUpd();return}
+    sgApi('games/'+encodeURIComponent(id)).then(function(d){
+      var tg=[],gn=sgSl(d.genres).filter(function(s){return SGG[s]});
+      sgSl(d.tags).forEach(function(s){if(SGT[s]&&SGMP.indexOf(s)<0&&tg.indexOf(s)<0)tg.push(s)});
+      var sid=d.id||id,q=tg.length?'tags='+tg.slice(0,3).join(','):(gn.length?'genres='+gn.slice(0,2).join(','):'');
+      if(!q){o.st='none';sgUpd();return}
+      return sgApi('games?'+q+'&ordering=-added&page_size=40&exclude_additions=true').then(function(r){
+        o.cands=(r.results||[]).filter(function(c){return c.id!==sid&&nrm(c.name)!==nrm(x.n)}).map(function(c){
+          var ct=sgSl(c.tags),cg=sgSl(c.genres),why=[];
+          var mp=ct.some(function(s){return SGMP.indexOf(s)>=0})||cg.indexOf('massively-multiplayer')>=0;
+          var st=tg.filter(function(s){return ct.indexOf(s)>=0}),sg=gn.filter(function(s){return cg.indexOf(s)>=0});
+          st.map(function(s){return SGT[s]}).concat(sg.map(function(s){return SGG[s]})).forEach(function(w){if(why.indexOf(w)<0)why.push(w)});
+          return{mp:mp,sc:st.length*2+sg.length,why:why.slice(0,3),add:c.added||0,rc:c.ratings_count||0,rt:c.rating||0,
+            g:{n:c.name,r:c.id,m:c.metacritic||null,i:c.background_image||null,y:(c.released||'').slice(0,4),gn:(c.genres||[]).slice(0,3).map(function(t){return t.name}).join(', ')}}
+        }).filter(function(c){return c.mp&&c.sc>=2&&c.rc>=20&&!/soundtrack|season pass|\bdlc\b|\bdemo\b|expansion/i.test(c.g.n)})
+          .sort(function(a,b){return b.sc-a.sc||b.add-a.add});
+        o.st='ok';sgUpd();
+      });
+    }).catch(function(){o.st='err';sgUpd()});
+  }
+  if(x.r)go(x.r);else rawgByName(x.n,go);
+}
+function sgHas(l,g){var n=nrm(g.n);return l.some(function(x){return(x.r&&x.r===g.r)||nrm(x.n)===n})}
+function sgFreeze(l){
+  var used={};Object.keys(sgInfo).forEach(function(k){(sgInfo[k].picks||[]).forEach(function(c){used[c.g.r]=1})});
+  l.forEach(function(x){var o=sgInfo[gkey(x)];if(!o||o.st!=='ok'||o.picks)return;
+    o.picks=[];o.cands.some(function(c){if(used[c.g.r]||sgHas(l,c.g))return false;used[c.g.r]=1;o.picks.push(c);return o.picks.length>=3})});
+}
+function sgSync(){
+  var p=document.getElementById('sgp');if(!p)return;
+  var l=sgMine(),ks={};l.forEach(function(x){ks[gkey(x)]=1});
+  Object.keys(sgInfo).forEach(function(k){if(!ks[k])delete sgInfo[k]});
+  if(hasRawg)l.forEach(sgStart);
+  sgFreeze(l);
+  var sig=JSON.stringify([l.map(function(x){return[gkey(x),x.n]}),Object.keys(sgInfo).map(function(k){return[k,sgInfo[k].st,(sgInfo[k].picks||[]).length]}),sgInf,Object.keys(sgDsc).length,WIDE.matches]);
+  if(sig===sgSig)return;sgSig=sig;
+  var lst=p.querySelector('.sgl'),st=p.scrollTop,ls=lst?lst.scrollTop:0;
+  var h='<div class="trh"><h2>✨ Suggestions personnalisées</h2><button class="ghost" id="sgx" aria-label="Fermer">✕</button></div>';
+  if(!l.length)h+='<p class="sgempty">Ajoute un jeu au pool pour voir tes suggestions</p>';
+  else{
+    var bl=l.slice().reverse().map(function(x){
+      var o=sgInfo[gkey(x)];if(!o)return'';
+      var top='<section class="grpb"><h3>Parce que tu as ajouté <b>'+esc(x.n)+'</b></h3>';
+      if(o.st==='load')return top+'<p class="emp">Recherche de suggestions…</p></section>';
+      if(o.st==='err')return top+'<p class="emp">Suggestions indisponibles pour ce jeu.</p></section>';
+      if(o.st!=='ok'||!o.picks||!o.picks.length)return'';
+      return top+'<div class="row3">'+o.picks.map(function(c){
+        var g=c.g,ad=sgHas(l,g),op=sgInf[g.r],t=sgDsc[g.r];
+        return'<div class="mc2"><div class="ti2'+(g.i?'':' ph')+'" data-i="'+esc(g.n.charAt(0).toUpperCase())+'" style="background:hsl('+hue(g.n)+',55%,32%)">'+(g.i?imgTag({i:g.i},320,180):'')+
+          (c.rt?'<span class="rtb">⭐ '+c.rt.toFixed(1).replace('.',',')+'</span>':'')+'<button type="button" class="inf'+(op?' on':'')+'" data-si="'+g.r+'" aria-expanded="'+(op?'true':'false')+'">ⓘ Infos</button></div>'+
+          '<b>'+esc(g.n)+'</b><small>'+esc([g.gn,g.y].filter(Boolean).join(' · ')||'Multijoueur')+'</small>'+(c.why.length?'<small class="why">'+esc(c.why.join(' · '))+'</small>':'')+
+          (op?'<p class="dsc">'+esc(t===undefined?'Chargement…':(t||'Pas de description disponible.'))+'</p>':'')+
+          '<button data-sa="'+g.r+'"'+(ad?' disabled':'')+'>'+(ad?'Ajouté ✓':'+ Ajouter')+'</button></div>'}).join('')+'</div></section>';
+    }).join('');
+    h+='<p class="cdesc">Des idées proches des jeux de ta liste.</p><div class="sgl">'+(bl||'<p class="emp">Aucune suggestion trouvée pour tes jeux pour l’instant.</p>')+'</div>';
+  }
+  p.innerHTML=h;p.scrollTop=st;lst=p.querySelector('.sgl');if(lst)lst.scrollTop=ls;
+  var x=document.getElementById('sgx');if(x)x.onclick=trClose;
+  function find(r){var f=null;Object.keys(sgInfo).forEach(function(k){(sgInfo[k].picks||[]).forEach(function(c){if(String(c.g.r)===String(r))f=c.g})});return f}
+  p.querySelectorAll('[data-si]').forEach(function(b){b.onclick=function(e){e.preventDefault();e.stopPropagation();var r=b.dataset.si;sgInf[r]=!sgInf[r];
+    if(sgInf[r]&&sgDsc[r]===undefined){var done=false;function fin(t){if(done)return;done=true;sgDsc[r]=t||'';sgUpd()}
+      setTimeout(function(){fin('')},8000);getDesc(r,function(o){fin(o.d||'')})}
+    sgUpd()}});
+  p.querySelectorAll('[data-sa]').forEach(function(b){b.onclick=function(){var g=find(b.dataset.sa);if(!g)return;sfx('tick');addG(pick(g))}});
+}
+document.getElementById('sgfab').onclick=sgOpen;
 document.getElementById('trbk').onclick=trClose;
 document.addEventListener('keydown',function(e){if(e.key==='Escape')trClose()});
 
@@ -538,6 +670,17 @@ function undoVote(m){
   var fi=order.findIndex(function(k){return!(k in vs)});order.splice(fi<0?order.length:fi,0,id);
   sfx('tick');chain=chain.then(function(){return wr({votes:snap,done:false,vo:vo})});render();
 }
+
+/* ===== Encart d'explication (affiché à la première visite) ===== */
+var introEl=document.getElementById('intro'),introPrev=null;
+function introOpen(){introPrev=document.activeElement;introEl.hidden=false;document.getElementById('introGo').focus()}
+function introClose(){if(introEl.hidden)return;introEl.hidden=true;sv('sj3-intro',1);if(introPrev&&introPrev.focus)try{introPrev.focus()}catch(e){}}
+document.getElementById('introX').onclick=introClose;
+document.getElementById('introGo').onclick=introClose;
+introEl.addEventListener('click',function(e){if(e.target===introEl)introClose()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!introEl.hidden){e.stopImmediatePropagation();introClose()}},true);
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-hlp]');if(b)introOpen()});
+if(!ld('sj3-intro'))introOpen();
 
 try{localStorage.removeItem('sj3-hist')}catch(e){}
 render();
