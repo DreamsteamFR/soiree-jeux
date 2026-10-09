@@ -192,6 +192,71 @@ button:disabled{opacity:.4;cursor:not-allowed}
 @keyframes inFade{from{opacity:0}to{opacity:1}}
 @keyframes inPop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){.intro,.ibox{animation:none}}
+
+/* ===== Thème Halloween (automatique du 1er au 31 octobre) ===== */
+body.hw{--bg:#0c0612;--mute:#b4a3c9;--acc:#ff7a1a;--acc2:#b07cff;background-image:radial-gradient(60% 40% at 8% 0%,rgba(255,122,26,.30),transparent 70%),radial-gradient(55% 40% at 100% 6%,rgba(155,92,255,.30),transparent 70%),radial-gradient(70% 30% at 50% 110%,rgba(255,122,26,.12),transparent 70%)}
+body.hw h1{background-image:linear-gradient(135deg,#fff,#ffd2a0 50%,#ff8a2a)}
+body.hw input:focus{box-shadow:0 0 0 4px rgba(255,122,26,.18)}
+body.hw{--card:rgba(255,140,40,.075);--line:rgba(255,140,60,.3);--no:#ff3d5a}
+body.hw::selection,body.hw *::selection{background:rgba(255,122,26,.45)}
+body.hw h1{text-shadow:0 0 22px rgba(255,122,26,.45);animation:hwfl 6s steps(1) infinite}
+body.hw button:not(.ghost):hover{box-shadow:0 0 18px rgba(255,122,26,.45)}
+body.hw .code{filter:drop-shadow(0 0 10px rgba(255,122,26,.5))}
+body.hw .bar i{box-shadow:0 0 10px rgba(255,122,26,.6)}
+body.hw .sug,body.hw .rkb,body.hw .mc2{border-color:rgba(255,140,60,.3)}
+body.hw .rkb:hover,body.hw .sug:hover{border-color:#ff7a1a;box-shadow:0 0 14px rgba(255,122,26,.3)}
+body.hw ::-webkit-scrollbar{width:10px}body.hw ::-webkit-scrollbar-thumb{background:#5a2a12;border-radius:6px}body.hw ::-webkit-scrollbar-track{background:#12081a}
+#hwfb{position:fixed;left:0;right:0;bottom:0;height:0;pointer-events:none;z-index:-1}
+#hwfb:before{content:"";position:fixed;left:0;right:0;bottom:0;height:90px;background:linear-gradient(0deg,rgba(255,122,26,.14),transparent)}
+#hwfb span{position:absolute;bottom:6px;font-size:1.7rem;opacity:.55;filter:drop-shadow(0 0 8px rgba(255,122,26,.5))}
+#hwfb span.g{animation:hwg 5s ease-in-out infinite}
+@keyframes hwg{0%,100%{transform:translateY(0);opacity:.35}50%{transform:translateY(-12px);opacity:.7}}
+@keyframes hwfl{0%,92%,96%,100%{opacity:1}93%,95%{opacity:.7}94%{opacity:.9}}
+#hwfb{z-index:4}
+#hwfb span[data-t]{pointer-events:auto;cursor:pointer;user-select:none;-webkit-user-select:none;transform-origin:50% 100%}
+#hwfb span.fly{animation:hwfly 1.6s ease-in forwards!important;pointer-events:none}
+#hwfb span.sink{animation:hwsink .9s ease-in forwards!important;pointer-events:none}
+#hwfb span.sq{animation:hwsq .4s ease-in forwards!important;pointer-events:none}
+#hwfb span.rise{animation:hwrise .9s ease-out both!important}
+#hwfb span.gone{visibility:hidden;pointer-events:none}
+@keyframes hwfly{0%{transform:translate(0,0) rotate(0);opacity:.7}30%{transform:translate(14px,-25vh) rotate(8deg)}60%{transform:translate(-14px,-55vh) rotate(-8deg);opacity:.5}100%{transform:translate(0,-95vh) rotate(10deg) scale(1.4);opacity:0}}
+@keyframes hwsink{0%{transform:translateY(0) rotate(0)}15%{transform:translateY(-3px) rotate(-5deg)}30%{transform:translateY(0) rotate(5deg)}100%{transform:translateY(60px);opacity:0}}
+@keyframes hwsq{0%{transform:scale(1,1)}40%{transform:scale(1.5,.2)}100%{transform:scale(1.7,.05);opacity:0}}
+@keyframes hwrise{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:.55}}
+@media(max-width:700px){#hwfb{z-index:-1}#hwfb span[data-t]{pointer-events:none}}
+@media(prefers-reduced-motion:reduce){#hwfb span.g,body.hw h1{animation:none}}
+@media(max-width:700px){#hwfb span:nth-child(n+5){display:none}}
+#hwp{display:none}
+body.hw #hwp.on{display:block;position:fixed;top:80px;left:50%;transform:translateX(-50%);width:min(440px,calc(100vw - 24px));z-index:7;border-radius:12px;overflow:hidden;border:1px solid rgba(255,122,26,.4);background:#000;box-shadow:0 6px 24px rgba(0,0,0,.6)}
+#hwp .hwv{width:100%;aspect-ratio:16/9;background:#000}
+#hwp .hwv iframe{display:block;width:100%;height:100%;border:0}
+#hwp .hwc{display:flex;gap:6px;padding:6px;background:#14081c}
+#hwp .hwc button{flex:1 1 0;min-height:0;padding:7px 4px;font-size:.78rem;border-radius:10px;border:1px solid rgba(255,122,26,.5);background:rgba(255,122,26,.18);color:#ffe9d2;box-shadow:none;cursor:pointer}
+#hwp .hwc button:hover{background:rgba(255,122,26,.4)}
+#hwp .x{position:absolute;top:4px;right:4px;width:26px;height:26px;min-height:0;padding:0;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;font-size:1rem;line-height:1;cursor:pointer;box-shadow:none}
+#hwq{display:none}
+body.hw #hwq{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;position:fixed;top:6px;left:50%;transform:translateX(-50%);width:min(440px,calc(100vw - 24px));min-height:46px;padding:5px 12px;text-align:center;border-radius:14px;background:rgba(20,8,28,.82);border:1px solid rgba(255,122,26,.35);z-index:6;pointer-events:none;box-shadow:0 2px 14px rgba(0,0,0,.4)}
+body.hw #hwq .q{font-size:.86rem;font-style:italic;line-height:1.25;color:#ffe9d2}
+body.hw #hwq .f{font-size:.72rem;color:#ff9a45;letter-spacing:.02em;display:flex;align-items:center;gap:8px}
+body.hw #hwq .rv{pointer-events:auto;font:inherit;font-size:.72rem;font-weight:700;padding:2px 9px;border-radius:999px;border:1px solid #ff9a45;background:rgba(255,122,26,.18);color:#ffe9d2;cursor:pointer;min-height:0;box-shadow:none}
+body.hw #hwq .mu{position:absolute;right:8px;bottom:4px;pointer-events:auto;font-size:1rem;line-height:1;min-height:0;padding:3px 5px;border-radius:8px;border:0;box-shadow:none;background:rgba(255,122,26,.18);cursor:pointer}
+body.hw #hwq .mu:hover{background:rgba(255,122,26,.4)}
+body.hw #hwq .rv:hover{background:rgba(255,122,26,.35)}
+body.hw #hwq.in{animation:hwqi .7s ease}
+body.hw{padding-top:82px}
+@keyframes hwqi{from{opacity:0;transform:translateX(-50%) translateY(-6px)}to{opacity:1;transform:translateX(-50%)}}
+#hwfx{position:fixed;left:0;right:0;top:0;height:0;pointer-events:none;z-index:-1}
+#hwfx span{position:absolute;top:8px;font-size:1.5rem;opacity:.5;filter:drop-shadow(0 0 8px rgba(255,122,26,.6));animation:hwf 7s ease-in-out infinite}
+@keyframes hwf{0%,100%{transform:translate(0,0) rotate(-6deg)}50%{transform:translate(14px,10px) rotate(6deg)}}
+@media(prefers-reduced-motion:reduce){#hwfx span{animation:none}}
+@media(max-width:700px){#hwfx span:nth-child(n+4){display:none}}
+.rkb{width:100%;text-align:left;color:var(--ink);cursor:pointer;font-weight:600;font-size:1rem;padding:10px 12px;gap:12px}
+.rkb:hover{filter:none;border-color:var(--acc2)}
+.rkn{flex:none;width:36px;height:36px;border-radius:50%;border:2px dashed rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.05rem}
+.rkb.on{border-color:var(--acc2)}.rkb.on .rkn{border:0;color:#0a0a14;background:linear-gradient(135deg,var(--acc),var(--acc2))}
+.rkg{margin:14px 0 6px;font-weight:700;font-size:.9rem;color:var(--ink)}
+.rkp{margin:0 0 10px}.rkp b{color:var(--ink)}
+.foot #rkr{margin-right:6px}
 </style>
 </head>
 <body>
@@ -244,10 +309,11 @@ function addG(o){var m=mine();if(!m)return;var g=m.round===rnd()?m.games:[],k=gk
 var curQ='',sugsR=[];
 function mix(q){
   var m=mine(),have={};((m&&m.round===rnd())?m.games:[]).forEach(function(x){have[gkey(x)]=1});
-  sugs=sugsR.filter(function(x){return!have[gkey(x)]});
+  var loc=extraMatch(q),lk={};loc.forEach(function(x){lk[nrm(x.n)]=1});
+  sugs=loc.concat(sugsR.filter(function(x){return!lk[nrm(x.n)]})).filter(function(x){return!have[gkey(x)]});
   drawSugs()}
 function fetchSugs(q){
-  if(!hasRawg||q.length<2){++sugSeq;sugsR=[];mix(curQ);return}
+  if(!hasRawg||q.length<2){++sugSeq;sugsR=[];mix(curQ||q);return}
   var t=++sugSeq;
   fetch('https://api.rawg.io/api/games?key='+encodeURIComponent(RAWG_KEY)+'&search='+encodeURIComponent(q)+'&page_size=6').then(function(r){return r.json()}).then(function(d){
     if(t!==sugSeq)return;
@@ -335,12 +401,12 @@ function gamesView(head){
   '<h2>Ajouter un jeu</h2><div class="row"><input id="g" placeholder="'+(hasRawg?'Tape un nom de jeu…':'Jeu ou activité')+'" maxlength="40" autocomplete="off"><button id="add">Ajouter</button></div><div id="sg" class="sgs"></div>'+
   '<h2>Tes jeux <span class="cnt">'+g.length+'</span></h2><p class="priv">Seuls tes jeux sont visibles ici : ceux des autres restent une surprise jusqu’aux swipes.</p>'+
   (g.length?'<div class="pl">'+g.map(function(x){
-    return'<div class="tc mine"><div class="ti'+(x.i?'':' ph')+'" data-i="'+esc(String(x.n).charAt(0).toUpperCase())+'" style="background:hsl('+hue(gkey(x))+',55%,32%)">'+(x.i?imgTag({i:x.i},320,180):'')+'</div><div class="tb"><b>'+esc(x.n)+'</b><small>'+esc([x.gn,x.y].filter(Boolean).join(' · ')||'Ajouté à la main')+'</small><div class="tf">'+(x.m?mcBadge(x.m):'')+'<button class="ghost rm" data-k="'+esc(gkey(x))+'" aria-label="Retirer '+esc(x.n)+'">Retirer</button></div></div></div>'}).join('')+'</div>'
+    return'<div class="tc mine"><div class="ti'+(x.i?'':' ph')+'" data-i="'+esc(String(x.n).charAt(0).toUpperCase())+'" style="background:hsl('+hue(gkey(x))+',55%,32%)">'+(x.i?imgTag({i:x.i},320,180):'')+'</div><div class="hwt"><b>'+esc(x.n)+'</b><small>'+esc([x.gn,x.y].filter(Boolean).join(' · ')||'Ajouté à la main')+'</small><div class="tf">'+(x.m?mcBadge(x.m):'')+'<button class="ghost rm" data-k="'+esc(gkey(x))+'" aria-label="Retirer '+esc(x.n)+'">Retirer</button></div></div></div>'}).join('')+'</div>'
     :'<p class="empty">Aucun jeu pour l’instant. Ajoute-en avec le champ ci-dessus ou depuis les jeux du moment.</p>')+
   '<div class="glass"><div class="stat"><b>'+c.length+' joueur'+(c.length>1?'s':'')+'</b><div class="pls">'+c.map(function(p){return'<span class="pn">'+(room.owner===p.id?'👑 ':'')+esc(p.name)+kickBtn(p)+'</span>'}).join('')+'</div></div></div>'+
   '<div class="readyrow"><label class="ready"><input type="checkbox" id="rd"'+(mr?' checked':'')+'><span class="sw"></span><span>Prêt à lancer les swipes</span></label><p class="wait">'+wt+'</p></div>';
   var inp=document.getElementById('g');
-  function add(){var v=inp.value.trim();if(!v)return;inp.value='';var o=(sugs[0]&&sugs[0].n.toLowerCase()===v.toLowerCase())?pick(sugs[0]):{n:v};++sugSeq;clearTimeout(sugT);curQ='';sugsR=[];mix('');sfx('tick');addG(o)}
+  function add(){var v=inp.value.trim();if(!v)return;inp.value='';var o=(sugs[0]&&nrm(sugs[0].n)===nrm(v))?pick(sugs[0]):{n:v};++sugSeq;clearTimeout(sugT);curQ='';sugsR=[];mix('');sfx('tick');addG(o)}
   document.getElementById('add').onclick=add;
   inp.onkeydown=function(e){if(e.key==='Enter')add()};
   inp.oninput=function(){clearTimeout(sugT);var q=inp.value.trim();curQ=q;mix(q);sugT=setTimeout(function(){fetchSugs(q)},300)};
@@ -397,16 +463,20 @@ function who(g,c){var y=[],n=[],x=[];c.forEach(function(p){var v=p.votes[g.id];i
 function banner(ms){return ms.length?'<div class="banner"><h2>🎉 Match !</h2><p>Tout le monde est partant pour : <b>'+ms.map(function(g){return esc(g.name)}).join(', ')+'</b>.</p></div>':''}
 function waitView(head,title,txt,list,ms){app.innerHTML=head+banner(ms)+'<h2>'+esc(title)+'</h2><p>'+esc(txt)+(list.length?list.map(function(p){return'<span class="pn">'+esc(p.name)+kickBtn(p)+'</span>'}).join(' '):'…')+'</p>';bindKick()}
 function newRound(){api('PATCH','/rooms/'+code,{phase:'games',round:rnd()+1}).then(poll).catch(fail)}
+var rkList=[];
 function rankView(head,c){
   var pl=pool(),m=mine(),votes=Object.assign({},m.votes,lv),mp={};pl.forEach(function(g){mp[g.id]=g});
-  if(rkR!==rnd()){myRank=pl.filter(function(g){return vv(votes[g.id])>0}).sort(function(a,b){return vv(votes[b.id])-vv(votes[a.id])||order.indexOf(a.id)-order.indexOf(b.id)}).map(function(g){return g.id});rkR=rnd()}
-  app.innerHTML=head+'<h2>Pas de match</h2><p>Personne ne s’est accordé sur un même jeu. Classe tes jeux du préféré au moins préféré : ceux où tu as dit non sont exclus.</p>'+
-  (myRank.length?myRank.map(function(id,i){var g=mp[id];return'<div class="rk"><span class="pos">'+(i+1)+'</span><span class="rn">'+esc(g.name)+' '+(vv(votes[id])===2?'♥':'😐')+'</span><button class="ghost" data-u="'+i+'" aria-label="Monter">▲</button><button class="ghost" data-w="'+i+'" aria-label="Descendre">▼</button></div>'}).join(''):'<p>Tu as dit non à tout : rien à classer.</p>')+
-  '<div class="foot"><button id="ok">Valider mon classement</button></div>';
-  function swap(i,j){if(j<0||j>=myRank.length)return;var t=myRank[i];myRank[i]=myRank[j];myRank[j]=t;render()}
-  app.querySelectorAll('[data-u]').forEach(function(b){b.onclick=function(){var i=+b.dataset.u;swap(i,i-1)}});
-  app.querySelectorAll('[data-w]').forEach(function(b){b.onclick=function(){var i=+b.dataset.w;swap(i,i+1)}});
-  document.getElementById('ok').onclick=function(){wr({rank:myRank.slice(),rdone:true})};
+  if(rkR!==rnd()){rkList=pl.filter(function(g){return vv(votes[g.id])>0}).sort(function(a,b){return vv(votes[b.id])-vv(votes[a.id])||order.indexOf(a.id)-order.indexOf(b.id)}).map(function(g){return g.id});myRank=rkList.length===1?rkList.slice():[];rkR=rnd()}
+  var n=rkList.length,done=myRank.length===n;
+  app.innerHTML=head+'<h2>Pas de match</h2><p>Personne ne s’est accordé sur un même jeu. Touche tes jeux dans l’ordre, du préféré au moins préféré : le premier touché reçoit le n°1, le suivant le n°2, etc. Tous les jeux doivent être classés (ceux où tu as dit non sont exclus). Touche un jeu déjà classé pour l’annuler.</p>'+
+  (n?'<p class="rkp"><b>'+myRank.length+' / '+n+'</b> classés'+(done?' ✓':'')+'</p>'+rkList.map(function(id,k){var g=mp[id],i=myRank.indexOf(id),v=vv(votes[id]),hd=(k===0||v!==vv(votes[rkList[k-1]]))&&rkList.some(function(x){return vv(votes[x])!==v})?'<p class="rkg">'+(v===2?'♥ Partants':'😐 Pas contre')+'</p>':'';return hd+'<button type="button" class="rk rkb'+(i>=0?' on':'')+'" data-r="'+esc(id)+'" aria-label="'+esc(g.name)+(i>=0?', classé n°'+(i+1)+', toucher pour annuler':', toucher pour classer')+'"><span class="rkn">'+(i>=0?i+1:'')+'</span><span class="rn">'+esc(g.name)+' '+(vv(votes[id])===2?'♥':'😐')+'</span></button>'}).join(''):'<p>Tu as dit non à tout : rien à classer.</p>')+
+  '<div class="foot">'+(n>1?'<button class="ghost" id="rkr"'+(myRank.length?'':' disabled')+'>Recommencer</button> ':'')+'<button id="ok"'+(done||!n?'':' disabled')+'>Valider mon classement</button></div>';
+  app.querySelectorAll('[data-r]').forEach(function(b){b.onclick=function(){var id=b.dataset.r,i=myRank.indexOf(id);
+    if(i>=0)myRank.splice(i,1);
+    else{myRank.push(id);if(myRank.length===n-1){var left=rkList.filter(function(x){return myRank.indexOf(x)<0});if(left.length===1)myRank.push(left[0])}}
+    sfx('tick');render()}});
+  var r=document.getElementById('rkr');if(r)r.onclick=function(){myRank=[];render()};
+  document.getElementById('ok').onclick=function(){if(n&&myRank.length!==n)return;wr({rank:myRank.slice(),rdone:true})};
 }
 function finalView(head,c){
   once('r'+rnd(),'done');
@@ -435,7 +505,28 @@ var SFX={
   match:function(){[523,659,784,1047,1319].forEach(function(f,i){tone(f,i*.09,.3,'triangle',.17)});tone(1568,.5,.6,'sine',.1)},
   done:function(){[523,659,784].forEach(function(f,i){tone(f,i*.1,.22,'triangle',.13)})}
 };
-function sfx(n){try{SFX[n]()}catch(e){}}
+function noiz(t0,d,vol,f){var a=ac();if(!a||!sndOn)return;var n=Math.floor(a.sampleRate*d),b=a.createBuffer(1,n,a.sampleRate),c=b.getChannelData(0),i;for(i=0;i<n;i++)c[i]=(Math.random()*2-1)*(1-i/n);var s=a.createBufferSource(),fl=a.createBiquadFilter(),g=a.createGain(),t=a.currentTime+t0;s.buffer=b;fl.type='lowpass';fl.frequency.value=f||1200;g.gain.setValueAtTime(vol||.2,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);s.connect(fl);fl.connect(g);g.connect(a.destination);s.start(t)}
+var HWFX={
+  g:function(){tone(420,0,.9,'sine',.12,900);tone(430,0,.9,'sine',.08,1300);tone(900,.25,.9,'triangle',.05,300);tone(1500,.1,.7,'sine',.03,2200)},
+  t:function(){noiz(0,.08,.22,900);noiz(.12,.07,.2,700);noiz(.25,.12,.25,500);tone(70,.05,.6,'sawtooth',.1,40)},
+  p:function(){noiz(0,.18,.35,1800);tone(160,0,.18,'square',.12,50);tone(90,.03,.25,'sine',.2,45)}};
+function hwfbClick(e){var el=e.target.closest&&e.target.closest('#hwfb span[data-t]');if(!el||el.classList.contains('fly')||el.classList.contains('sink')||el.classList.contains('sq')||el.classList.contains('gone'))return;
+  var k=el.dataset.t;try{HWFX[k]()}catch(x){}
+  el.classList.remove('rise');el.classList.add(k==='g'?'fly':k==='t'?'sink':'sq');
+  var dur=k==='g'?1600:k==='t'?900:400,wait=k==='t'?3500:k==='g'?30000:22000;
+  setTimeout(function(){el.classList.remove('fly','sink','sq');el.classList.add('gone')},dur);
+  setTimeout(function(){el.classList.remove('gone');el.classList.add('rise');setTimeout(function(){el.classList.remove('rise')},950)},dur+wait)}
+var SFXH={
+  yes:function(){tone(659,0,.3,'sine',.15);tone(988,.07,.4,'sine',.1);tone(1319,.14,.35,'triangle',.06)},
+  no:function(){tone(130,0,.35,'sawtooth',.09,55);tone(98,.02,.35,'square',.04,50)},
+  mid:function(){tone(330,0,.2,'triangle',.12);tone(349,.06,.2,'triangle',.1)},
+  tick:function(){tone(190,0,.07,'square',.05,120)},
+  join:function(){tone(1200,0,.07,'sine',.05,2400);tone(1800,.07,.07,'sine',.05,900);tone(1000,.15,.1,'sine',.05,2000)},
+  go:function(){[392,370,330,294].forEach(function(f,i){tone(f,i*.13,.3,'sawtooth',.06)});tone(98,.5,.7,'sine',.14)},
+  match:function(){tone(98,0,1.1,'sine',.2);[523,622,784,1047].forEach(function(f,i){tone(f,.12+i*.14,.9,'sine',.1)});tone(1568,.7,1,'triangle',.05)},
+  done:function(){[392,466,587].forEach(function(f,i){tone(f,i*.12,.35,'triangle',.11)})}
+};
+function sfx(n){try{var S=hwOn()?SFXH:SFX;(S[n]||SFX[n])()}catch(e){}}
 function once(k,n){if(onceK!==k){onceK=k;sfx(n)}}
 function sndBtn(){return'<button class="ghost hlp" data-hlp="1" aria-label="Comment ça marche ?" title="Comment ça marche ?">?</button>'+'<button class="ghost snd" id="snd" aria-label="'+(sndOn?'Couper le son':'Activer le son')+'">'+(sndOn?'🔊':'🔇')+'</button>'}
 function toggleSnd(){sndOn=!sndOn;sv('sj3-snd',sndOn);if(sndOn)sfx('tick');render()}
@@ -448,7 +539,7 @@ function autoStart(){
   api('PATCH','/rooms/'+code,{phase:'swipe'}).then(poll).catch(function(e){starting=false;fail(e)});
 }
 var nameC=ld('sj3-nm')||{};
-function nrm(t){return String(t).toLowerCase().replace(/[™®©]/g,'').replace(/[^a-z0-9]+/g,' ').trim()}
+function nrm(t){return String(t).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[™®©]/g,'').replace(/[^a-z0-9]+/g,' ').trim()}
 function rawgByName(n,cb){
   if(!hasRawg||!n)return;var k=nrm(n);
   if(nameC[k]!==undefined){cb(nameC[k]||0);return}
@@ -458,6 +549,9 @@ function rawgByName(n,cb){
 }
 var FRD={"Big Walk": "Retrouvez vos amis et perdez-vous dans un vaste monde. Un jeu coop en ligne de marche et communication par les devs d'Untitled Goose Game.", "BOMBANANA!": "Incarnez des singes démineurs entre amis ! Coopérez en équipe de trois singes : un aveugle, un sourd et un muet. Chaque joueur dispose d'une partie différente des informations. Communiquez, résolvez des casse-têtes et jouez contre la montre. Désamorcerez-vous les bombes avant qu'elles explosent ?", "How to Fish": "How to Fish est un simulateur de pêche pour 1 à 4 joueurs qui s'appuie sur règles de la physique. Alors que vous êtes tranquillement en train de siroter un verre sur votre bateau, vous vous écrasez sur une petite île. Pour pouvoir rentrer chez vous, vous allez devoir apprendre à pêcher.", "Valheim": "Un jeu multijoueur brutal d'exploration et de survie pour 1 à 10 joueurs, prenant place dans un purgatoire en génération procédurale inspiré par la culture viking. Combattez, bâtissez et accomplissez des exploits à la gloire d'Odin!", "RuneScape: Dragonwilds": "Sur le continent oublié d'Ashenfall, les dragons se sont éveillés. Récoltez, bâtissez, progressez et fabriquez tout ce qui vous plaira dans ce jeu de survie coopératif. Maîtrisez l'art de la survie et percez des secrets immémoriaux pour affronter la Reine des dragons.", "Active Matter": "Lancez-vous dans des raids d'extraction ou participez à des batailles en JcJ dans le multivers fracturé de ce jeu de tir militaire réaliste. Battez-vous dans des zones quantiques instables et emparez-vous de la matière active, capable de déformer le temps et l'espace.", "Aniimo": "Aniimo est un RPG en monde ouvert nouvelle génération de capture de créatures. Explorez un vaste continent, fusionnez avec des Aniimos uniques pour débloquer de nouvelles capacités, et rencontrez d'autres Nomades pour vivre des combats palpitants et percer les mystères de ce monde.", "Way of the Hunter 2": "Vivez l'aventure de chasse la plus réaliste dans les étendues sauvages d'Amérique du Nord et d'Afrique. Découvrez une faune impitoyable au comportement plus vrai que nature et des écosystèmes dynamiques tout en agrandissant votre collection de trophées dans votre gîte.", "NBA 2K27": "La quête est sans fin et l'action ne s'arrête jamais dans NBA 2K27. Poursuivez la gloire à tout moment dans MyCAREER, MyTEAM et MyNBA, et transformez vos rêves de basketball en réalité.", "EA SPORTS FC 27": "Découvrez The World's Game (le jeu Universel) dans EA SPORTS FC™ 27. Découvrez The Grounds, un terrain de jeu de football social où la rue se mêle au stade, et bénéficiez d'un meilleur contrôle dans chaque mode grâce aux innovations qui offrent un gameplay encore plus fidèle au football.", "OpenFront": "OpenFront est un jeu de battle royale PvP où des centaines de joueurs s'affrontent sur une immense carte, signant des alliances, amassant de l'or et déchaînant un enfer de frappes atomiques pour dominer le monde.", "Wand & Order: Tidy Up The Magic Shop": "Un simulateur douillet de rangement et de nettoyage coopératif à la première personne ! Triez baguettes, cartes de tarot et potions, puis remettez la boutique en ordre pour gagner des points et débloquer de puissants sortilèges qui vous aideront à rétablir l'ordre avant le retour de l'Alchimiste !", "The Lord of the Rings: War in the North": "Le Seigneur des anneaux : La Guerre du Nord – Édition Legacy étoffe le Légendarium de Tolkien en vous plongeant au cœur de l'histoire inédite et brutale d'Agandaûr, un Númenóréen Noir, et serviteur de Sauron, qui a rallié des forces colossales dans les ruines de Fornost.", "Gallipoli": "Débarquez sur les plages de Gallipoli et participez à des batailles à objectifs avec 50 joueurs sur les fronts ottomans ! Vivez l'expérience immersive des tranchées et des expéditions désertiques de la Première Guerre mondiale en incarnant une des 10 classes historiques aux armes authentiques.", "WheelMates": "Partez à deux dans une aventure de conduite avec des voitures télécommandées. Explorez le laboratoire du professeur, résolvez des énigmes, trouvez des passages cachés et découvrez ce qui s'y est passé. Avec le Pass ami, votre partenaire peut vous rejoindre gratuitement.", "Mimic Party": "Un jeu vocal en ligne, de 1 à 5 joueurs. Un son, une seule prise pour l'imiter tout le monde en même temps, sans tour de rôle. Ta prise est notée sur la hauteur et le rythme, puis la roue décide qui gagne un bonus et à qui on colle un pet. Tout le monde est ridicule, c'est le principe.", "Far Far West": "Yee-haw, Cowboys ! Faites équipe dans ce jeu de tir coop à 4 joueurs. Voyagez dans le 'Far Far West' pour éliminer des monstres, lancer des sorts, compléter des missions et collecter des primes. Travaillez en équipe pour entrer, être payé et vous en sortir (en grande partie) vivant.", "Palworld": "Un tout nouveau jeu de survie multijoueur en monde ouvert où le but est de collectionner de mystérieuses créatures, les Pals, afin de les faire combattre, bâtir des structures, travailler dans les champs et faire tourner vos usines.", "LEGO Batman: Legacy of the Dark Knight": "Deviens le Chevalier noir et vis l'histoire mythique de Batman dans une aventure pleine d'action et de combats acharnés. Explore Gotham City en monde ouvert dans le style LEGO bien connu et apprécié des fans.", "Shift At Midnight": "Jeu d'horreur coopératif en ligne pouvant réunir jusqu'à 3 joueurs. Travaillez en équipe au cours de nuits générées aléatoirement pour enquêter sur vos clients, dont certains ne sont pas réellement humains. Une erreur, et il vous faudra vous barricader, poser des pièges et vous cacher.", "Cat Mail Co.": "Dirigez la poste de l'île de chats. Triez et distribuez les colis qui arrivent chaque jour du bateau, organisez tout à votre façon. La nuit venue, la lune dévoile des secrets cachés sur les colis. Venez à bout d'une mystérieuse pile de colis et débloquez de nouvelles capacités et destinations.", "Subnautica 2": "Subnautica 2 est un jeu d'aventure et de survie sous-marine dans un monde océanique inédit, développé par Unknown Worlds. Jouez en solo ou jusqu'à 4 joueurs en coop. Adaptez-vous pour survivre en construisant des bases et des outils. Explorez l'inconnu et découvrez les mystères des profondeurs.", "Absolum": "Incarnez les héros exclus de Talamh et rejoignez un combat sans pitié pour arracher la magie des griffes du Roi Soleil Azra dans Absolum, un beat 'em up roguelite original par Dotemu.", "Escape Simulator 2": "La suite du jeu d'évasion le plus vendu, apporte une nouvelle approche des puzzles à la première personne avec une variété de nouvelles salles à explorer en solo ou avec des amis. Résolvez des énigmes complexes, découvrez des secrets cachés ou créez vos propres salles d'évasion avec Room Editor 2.0.", "PowerWash Simulator 2": "PowerWash Simulator revient avec des missions de nettoyage, des pièces d'équipement et des fonctionnalités flambant neuves. Transformez des environnements encrassés en des paysages immaculés et sereins, en solo ou avec des amis. Il est temps de relâcher la pression !", "RV There Yet?": "Un jeu d'aventure coopératif qui vous met au défi de conduire votre caravane jusqu'à votre domicile !", "Tears of Metal": "Tears of Metal est un roguelike médiéval co-op de type hack-and-slash. Combattez des hordes d'ennemis pour reconquérir votre île avec l'aide de votre redoutable bataillon écossais. En vous enfonçant dans les tranchées, découvrez les mystères du Météore du Dragon et l'invasion ennemie perfide.", "Machine Party": "Machine Party consiste en un ensemble de mini-jeux violents, jouables à plusieurs, et où tout échec vous est fatal.", "Windrose": "Embarquez dans une aventure de survie JcE dans l'âge des pirates. Combattez à terre et en mer, en solo ou entre amis. Construisez, fabriquez, explorez un vaste monde et découvrez ses secrets. Avec un gameplay « Souls » approchable, défiez des boss redoutables, naviguez et pillez des trésors !", "Gamble With Your Friends": "Un jeu en ligne coop de type casino de 1 à 6 joueurs où vous et vos amis partagez un portefeuille et une dette colossale. Pariez, achetez des objets douteux, prenez d'atroces décisions et grimpez la tour pour rembourser votre quota quotidien en 5 minutes, ou subissez les conséquences de votre échec.", "Escape the Backrooms": "Escape the Backrooms est un jeu d'exploration et d'horreur jouable de 1 à 4 en coop. Traversez plus de 30 étages inquiétants tout en évitant les entités et autres dangers. Essayez de vous enfuir, mais sachez ceci : votre survie n'est pas garantie.", "Where Winds Meet": "Where Winds Meet est un RPG d'action-aventure en monde ouvert, épique et profondément enraciné dans l'héritage du Wuxia.", "Heroes of Might and Magic: Olden Era": "Heroes of Might and Magic: Olden Era est la préquelle d'une série de jeux de stratégie au tour par tour qui a donné au genre ses lettres de noblesse. Levez de grandes armées et lancez des sorts dévastateurs pour vaincre vos ennemis en solo ou en multijoueur.", "Avatar Legends: The Fighting Game": "Maîtrisez les éléments et affrontez des personnages légendaires dans Avatar Legends: The Fighting Game. Dans ce jeu doté d'une animation en 2D dessinée à la main et fidèle aux origines de la série, vous pourrez faire l'expérience du monde d'Avatar de toutes les façons imaginables.", "Marathon": "Explorez la colonie perdue de Tau Ceti IV et pillez des objets de valeur dans ce jeu de tir et de survie à la première personne aux enjeux élevés par les créateurs de Halo et Destiny.", "Forza Horizon 6": "Découvrez les paysages à couper le souffle du Japon au volant de plus de 550 voitures réelles et devenez une légende de la course automobile dans la plus grande aventure motorisée Forza Horizon à ce jour."};
 var FRK={};Object.keys(FRD).forEach(function(k){FRK[nrm(k)]=FRD[k]});
+var EXTRA=[{"n": "Scam Line", "s": 2794590, "i": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2794590/373990e793edf8e2ff544c1180aa15f7f07a75e2/header.jpg?t=1789555577", "y": "2026", "gn": "Coop, Déduction", "k": "scamline arnaque", "d": "Scam Line est un jeu de tromperie sociale pour 4 à 8 joueurs dans lequel votre groupe devra relever différents défis."}, {"n": "Sauve le Shérif", "s": 4760110, "i": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4760110/2d109ea2a26e9b870bd0b4153db4a8f6d1a69be0/header_french.jpg?t=1783779741", "y": "2026", "gn": "Stratégie, Déduction", "k": "sauve le sherif save the sheriff western", "d": "Sauve le Shérif 4 à 10 joueurs. Deux saloons. Une seule règle : ne fais confiance à personne. Chat vocal en proximité, duels en face-à-face, et un dilemme à chaque tir : pacifier ou abattre."}];
+EXTRA.forEach(function(x){FRD[x.n]=x.d;FRK[nrm(x.n)]=x.d});
+function extraMatch(q){var n=nrm(q).trim();if(n.length<2)return[];return EXTRA.filter(function(x){return nrm(x.n+' '+(x.k||'')).indexOf(n)>=0}).map(function(x){return{n:x.n,i:x.i,y:x.y,gn:x.gn}})}
 function getDesc(rid,cb){
   if(!hasRawg||!rid)return;var k=String(rid);
   if(descC[k]){cb(descC[k]);return}
@@ -708,6 +802,47 @@ if(!ld('sj3-intro'))introOpen();
 try{localStorage.removeItem('sj3-hist')}catch(e){}
 render();
 (function(){var c=ld('sj3-code');if(configured&&c&&me.name&&(!pendCode||pendCode===c))enter(c,false)})();
+
+/* Halloween : actif automatiquement tout le mois d'octobre */
+function hwOn(){var d=new Date();return/[?&]hw=1/.test(location.search)||(d>=new Date(2026,9,1)&&d<new Date(2026,10,1))}
+function hwApply(){var on=hwOn();document.body.classList.toggle('hw',on);var f=document.getElementById('hwfx');
+  if(on&&!f){f=document.createElement('div');f.id='hwfx';f.setAttribute('aria-hidden','true');f.innerHTML='<span style="left:3%;animation-delay:0s">🦇</span><span style="left:46%;top:2px;animation-delay:-2s">🕸️</span><span style="right:4%;animation-delay:-4s">🎃</span><span style="left:24%;top:30px;animation-delay:-1s;font-size:1.1rem">🦇</span><span style="right:26%;top:24px;animation-delay:-3s;font-size:1.1rem">🦇</span>';document.body.appendChild(f)}
+  if(!on&&f)f.remove();
+  var fb=document.getElementById('hwfb');if(on&&!fb){fb=document.createElement('div');fb.id='hwfb';fb.setAttribute('aria-hidden','true');fb.addEventListener('click',hwfbClick);fb.innerHTML='<span data-t="t" style="left:35%">\uD83E\uDEA6</span><span data-t="g" class="g" style="left:43%;animation-delay:-1s">\uD83D\uDC7B</span><span data-t="g" class="g" style="left:57%;animation-delay:-3s">\uD83D\uDC7B</span><span data-t="p" style="left:64%">\uD83C\uDF83</span>';document.body.appendChild(fb)}
+  if(!on&&fb)fb.remove();
+  var qe=document.getElementById('hwq');if(on&&!qe){qe=document.createElement('div');qe.id='hwq';qe.setAttribute('aria-live','off');document.body.appendChild(qe);hwqNext()}
+  if(!on&&qe)qe.remove();var hp=document.getElementById('hwp');if(!on&&hp)hp.remove();
+  var m=document.querySelector('meta[name=theme-color]');if(m)m.content=on?'#0c0612':'#0a0a14'}
+var HWQ=[["Here's Johnny!", "Shining"], ["All work and no play makes Jack a dull boy.", "Shining"], ["Come and play with us, Danny. Forever... and ever... and ever.", "Shining"], ["Wendy, I'm home.", "Shining"], ["Redrum.", "Shining"], ["I ate his liver with some fava beans and a nice Chianti.", "Le Silence des agneaux"], ["It rubs the lotion on its skin.", "Le Silence des agneaux"], ["Good evening, Clarice.", "Le Silence des agneaux"], ["I see dead people.", "Sixième Sens"], ["I have to return some videotapes.", "American Psycho"], ["A boy's best friend is his mother.", "Psychose"], ["We all go a little mad sometimes.", "Psychose"], ["A man should have a hobby.", "Psychose"], ["You're going to need a bigger boat.", "Les Dents de la mer"], ["Trust is a tough thing to come by these days.", "The Thing"], ["I wanna play a game.", "Saw"], ["If it bleeds, we can kill it.", "Predator"], ["The power of Christ compels you!", "L'Exorciste"], ["What an excellent day for an exorcism.", "L'Exorciste"], ["I'm the Devil. Now kindly undo these straps.", "L'Exorciste"], ["What's your favorite scary movie?", "Scream"], ["Never say \"I'll be right back.\"", "Scream"], ["Movies don't create psychos. Movies make psychos more creative.", "Scream"], ["Sometimes the world of the living gets mixed up with the world of the dead.", "Les Autres"], ["It's not the house that's haunted... it's your son.", "Insidious"], ["Was that the boogeyman?", "Halloween"], ["It's Halloween... everyone's entitled to one good scare.", "Halloween"], ["He got hungry.", "Halloween"], ["I'm scared to close my eyes. I'm scared to open them!", "Le Projet Blair Witch"], ["I'm your boyfriend now, Nancy!", "Les Griffes de la nuit"], ["Whatever you do, don't fall asleep.", "Les Griffes de la nuit"], ["Every town has an Elm Street.", "Freddy sort de la nuit"], ["The children of the night. What sweet music they make!", "Dracula (1992)"], ["I am Dracula. I bid you welcome.", "Dracula (1931)"], ["I never drink... wine.", "Dracula (1931)"], ["I'm your number one fan.", "Misery"], ["This is no dream! This is really happening!", "Rosemary's Baby"], ["They're all gonna laugh at you.", "Carrie"], ["Be afraid. Be very afraid.", "La Mouche"], ["Where we're going, we don't need eyes to see.", "Event Horizon"], ["Good, bad, I'm the one with the gun.", "Evil Dead 3 : L'Armée des ténèbres"], ["Come git some!", "Evil Dead 3 : L'Armée des ténèbres"], ["Groovy.", "Evil Dead 2"], ["Gimme back my hand!", "Evil Dead 2"], ["They're here!", "Poltergeist"], ["Sleep all day. Party all night. Never grow old. Never die.", "Génération perdue"], ["It's just a bunch of hocus pocus!", "Hocus Pocus"], ["I put a spell on you and now you're mine.", "Hocus Pocus"], ["We have such sights to show you.", "Hellraiser"], ["No tears please, it's a waste of good suffering.", "Hellraiser"], ["They're coming to get you, Barbara!", "La Nuit des morts-vivants"], ["When there's no more room in Hell, the dead will walk the Earth.", "Zombie (Dawn of the Dead)"], ["Hi, I'm Chucky. Wanna play?", "Chucky (Jeu d'enfant)"], ["I will not be threatened by a walking meat loaf!", "Le Loup-garou de Londres"], ["Sometimes dead is better.", "Simetierre"], ["What's blood for, if not for shedding?", "Candyman"], ["It's alive! It's alive!", "Frankenstein (1931)"], ["To a new world of gods and monsters!", "La Fiancée de Frankenstein"], ["Don't you see that killing me is not going to bring back your apples?", "The Wicker Man"], ["My family's always been in meat.", "Massacre à la tronçonneuse"], ["God's not supposed to be a hack horror writer.", "L'Antre de la folie"], ["You play a good game, boy... but the game is finished. Now you die.", "Phantasm"], ["Meat's meat, and a man's gotta eat.", "Motel Hell"], ["In space no one can hear you scream.", "Alien"], ["Game over, man!", "Aliens"], ["Seven days.", "The Ring"], ["They all float down here... and you'll float too.", "Ça"], ["Never feed them after midnight.", "Gremlins"], ["Ki ki ki, ma ma ma.", "Vendredi 13"], ["Beetlejuice, Beetlejuice, Beetlejuice!", "Beetlejuice"], ["Help me! Help meeeee!", "La Mouche (1958)"], ["We're Americans.", "Us"], ["The owls are not what they seem.", "Twin Peaks (série)"], ["This is... excuse me... a damn fine cup of coffee.", "Twin Peaks (série)"], ["Fire walk with me!", "Twin Peaks (série)"], ["The truth is out there.", "X-Files (série)"], ["Friends don't lie.", "Stranger Things (série)"], ["Mornings are for coffee and contemplation.", "Stranger Things (série)"], ["In every generation there is a Chosen One.", "Buffy contre les vampires (série)"], ["Saving people, hunting things... the family business.", "Supernatural (série)"], ["Driver picks the music, shotgun shuts his cake hole.", "Supernatural (série)"], ["There is a fifth dimension, beyond that which is known to man.", "La Quatrième Dimension (série)"], ["We are the walking dead.", "The Walking Dead (série)"], ["If I had known the world was ending, I would've brought better books.", "The Walking Dead (série)"], ["Look at the flowers.", "The Walking Dead (série)"], ["The power of three will set us free.", "Charmed (série)"], ["We're the protectors of the innocent. We're known as the Charmed Ones.", "Charmed (série)"], ["From blood and pain come perfection.", "American Horror Story (série)"], ["The dead can hold a grudge better than most Scorpios.", "American Horror Story (série)"], ["The one thing about the dead is they've got nothing left to lose.", "American Horror Story (série)"], ["All monsters are human. You're a monster.", "American Horror Story (série)"], ["There is no God. Not a God who would create the things I saw.", "American Horror Story (série)"], ["When witches don't fight, we burn.", "American Horror Story (série)"], ["I'd rather burn than boil.", "American Horror Story (série)"], ["I'll tell you who the monsters are!", "American Horror Story (série)"], ["Oh, honey, goddesses don't speak in whispers. They scream.", "American Horror Story (série)"]];
+var HWPL='PLthCP1mCyc95I66_ZLCqv8DCjAFODW8B1';
+var HWX=[{t:'The Name Game (American Horror Story)',id:'zQpKcLAnU8A',k:'name game the namegame asylum sister jude jessica lange ahs american horror story'}],hwpP=null,hwpOk=false,hwpNG=false;
+function hwpApi(cb){if(window.YT&&YT.Player){cb();return}var o=window.onYouTubeIframeAPIReady;window.onYouTubeIframeAPIReady=function(){if(o)try{o()}catch(e){}cb()};if(!document.getElementById('ytapi')){var t=document.createElement('script');t.id='ytapi';t.src='https://www.youtube.com/iframe_api';document.head.appendChild(t)}}
+function hwpRand(){try{var n=(hwpP.getPlaylist()||[]).length;if(n>1)hwpP.playVideoAt(Math.floor(Math.random()*n))}catch(e){}}
+function hwpList(rand){if(!hwpOk)return;hwpNG=false;try{hwpP.loadPlaylist({list:HWPL,listType:'playlist',index:0});hwpP.setShuffle(true)}catch(e){}if(rand)setTimeout(hwpRand,1800)}
+function hwpExtra(x){if(!hwpOk)return;hwpNG=true;try{hwpP.loadVideoById(x.id)}catch(e){}}
+function hwpBonus(){var n=582;try{n=(hwpP.getPlaylist()||[]).length||582}catch(e){}if(Math.random()<HWX.length/(n+HWX.length)){hwpExtra(HWX[Math.floor(Math.random()*HWX.length)]);return true}return false}
+function hwpState(e){var b=document.querySelector('#hwp .pp');if(b)b.textContent=e.data===1?'⏸ Pause':'▶ Lecture';
+  if(e.data===0){if(hwpNG)hwpList(true);else hwpBonus()}}
+function hwpCtl(k){if(!hwpOk)return;try{
+  if(k==='pp'){var st=hwpP.getPlayerState();if(st===1)hwpP.pauseVideo();else hwpP.playVideo()}
+  else if(k==='next'){if(hwpNG)hwpList(false);else if(!hwpBonus())hwpP.nextVideo()}
+  else if(k==='rand'){if(hwpNG)hwpList(true);else if(!hwpBonus())hwpRand()}}catch(e){}}
+function hwpToggle(){var p=document.getElementById('hwp');if(p){p.classList.toggle('on');return}
+  p=document.createElement('div');p.id='hwp';
+  p.innerHTML='<div class="hwv"><div id="hwpf"></div></div><div class="hwc"><button type="button" data-k="next">⏭ Suivante</button><button type="button" class="pp" data-k="pp">⏸ Pause</button><button type="button" data-k="rand">🔀 Aléatoire</button></div><button type="button" class="x" aria-label="Masquer le lecteur">×</button>';
+  document.body.appendChild(p);p.classList.add('on');
+  p.querySelectorAll('button[data-k]').forEach(function(b){b.onclick=function(){hwpCtl(b.dataset.k)}});
+  p.querySelector('.x').onclick=function(){p.classList.remove('on')};
+  hwpApi(function(){hwpP=new YT.Player('hwpf',{width:'100%',height:'100%',playerVars:{listType:'playlist',list:HWPL,autoplay:1,rel:0,playsinline:1},events:{onReady:function(){hwpOk=true;try{hwpP.setShuffle(true)}catch(e){}setTimeout(hwpRand,1500)},onStateChange:hwpState}})})}
+var hwqI=-1,hwqT=0,hwqR=false;
+function hwqNext(){var e=document.getElementById('hwq');if(!e)return;var n;do{n=Math.floor(Math.random()*HWQ.length)}while(n===hwqI&&HWQ.length>1);hwqI=n;hwqT=Date.now();hwqR=false;e.innerHTML='';var mu=document.createElement('button');mu.type='button';mu.className='mu';mu.textContent='\uD83C\uDFB5';mu.title='Musiques de films d\u2019horreur';mu.setAttribute('aria-label','Ouvrir ou fermer la musique');mu.onclick=hwpToggle;e.appendChild(mu);var a=document.createElement('span');a.className='q';a.textContent='\u201c'+HWQ[n][0]+'\u201d';var b=document.createElement('span');b.className='f';e.appendChild(a);e.appendChild(b);e.classList.remove('in');void e.offsetWidth;e.classList.add('in');hwqDraw()}
+function hwqDraw(){var e=document.getElementById('hwq');if(!e||hwqI<0)return;var t=(Date.now()-hwqT)/1000,f=e.querySelector('.f');if(!f)return;
+  if(hwqR||t>=20){hwqR=true;if(f.dataset.m!=='r'){f.dataset.m='r';f.innerHTML='';f.textContent='\uD83C\uDFAC '+HWQ[hwqI][1]}return}
+  var left=Math.ceil(20-t);if(f.dataset.m!=='c'){f.dataset.m='c';f.innerHTML='<span class="cd"></span> <button type="button" class="rv">Révéler le film</button>';f.querySelector('.rv').onclick=function(){hwqR=true;hwqDraw()}}
+  f.querySelector('.cd').textContent='\uD83C\uDFAC Quel film ? '+left+'\u00a0s'}
+function hwqTick(){var e=document.getElementById('hwq');if(!e)return;if(hwqI<0||Date.now()-hwqT>=30000)hwqNext();else hwqDraw()}
+setInterval(hwqTick,1000);
+hwApply();setInterval(hwApply,60000);
 </script>
 </body>
 </html>
