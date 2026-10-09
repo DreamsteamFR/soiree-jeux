@@ -226,8 +226,14 @@ body.hw ::-webkit-scrollbar{width:10px}body.hw ::-webkit-scrollbar-thumb{backgro
 @media(max-width:700px){#hwfb{z-index:-1}#hwfb span[data-t]{pointer-events:none}}
 @media(prefers-reduced-motion:reduce){#hwfb span.g,body.hw h1{animation:none}}
 @media(max-width:700px){#hwfb span:nth-child(n+9){display:none}}
+#hwm{display:none}
+body.hw #hwm{display:flex;align-items:center;gap:8px;position:fixed;bottom:14px;right:14px;z-index:9;padding:6px 12px 6px 8px;border-radius:999px;background:rgba(20,8,28,.88);border:1px solid rgba(255,122,26,.4);box-shadow:0 2px 14px rgba(0,0,0,.45)}
+body.hw #hwm .mu{min-height:0;width:auto;font-size:1.25rem;line-height:1;padding:4px 8px;border-radius:999px;border:0;box-shadow:none;background:rgba(255,122,26,.25);cursor:pointer}
+body.hw #hwm .mu:hover{background:rgba(255,122,26,.45)}
+body.hw #hwm .vi{font-size:1rem;line-height:1}
+body.hw #hwm .vol{width:90px;height:14px;margin:0;padding:0;min-height:0;accent-color:#ff7a1a;cursor:pointer}
 #hwp{display:none}
-body.hw #hwp.on{display:block;position:fixed;bottom:14px;right:14px;width:min(340px,calc(100vw - 28px));z-index:9;border-radius:12px;overflow:hidden;border:1px solid rgba(255,122,26,.4);background:#000;box-shadow:0 6px 24px rgba(0,0,0,.6)}
+body.hw #hwp.on{display:block;position:fixed;bottom:64px;right:14px;width:min(340px,calc(100vw - 28px));z-index:9;border-radius:12px;overflow:hidden;border:1px solid rgba(255,122,26,.4);background:#000;box-shadow:0 6px 24px rgba(0,0,0,.6)}
 #hwp .hwv{width:100%;aspect-ratio:16/9;background:#000}
 #hwp .hwv iframe{display:block;width:100%;height:100%;border:0}
 #hwp .hwc{display:flex;gap:6px;padding:6px;background:#14081c}
@@ -235,14 +241,10 @@ body.hw #hwp.on{display:block;position:fixed;bottom:14px;right:14px;width:min(34
 #hwp .hwc button:hover{background:rgba(255,122,26,.4)}
 #hwp .x{position:absolute;top:6px;right:6px;width:auto;min-height:0;padding:3px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.7);color:#fff;font-size:.75rem;line-height:1.2;cursor:pointer;box-shadow:none}
 #hwq{display:none}
-body.hw #hwq{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;position:fixed;top:8px;left:50%;transform:translateX(-50%);width:min(500px,calc(100vw - 24px));min-height:64px;padding:8px 92px 8px 16px;text-align:center;border-radius:16px;background:rgba(20,8,28,.82);border:1px solid rgba(255,122,26,.35);z-index:6;pointer-events:none;box-shadow:0 2px 14px rgba(0,0,0,.4)}
+body.hw #hwq{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;position:fixed;top:8px;left:50%;transform:translateX(-50%);width:min(500px,calc(100vw - 24px));min-height:64px;padding:8px 16px;text-align:center;border-radius:16px;background:rgba(20,8,28,.82);border:1px solid rgba(255,122,26,.35);z-index:6;pointer-events:none;box-shadow:0 2px 14px rgba(0,0,0,.4)}
 body.hw #hwq .q{font-size:1.05rem;font-style:italic;line-height:1.25;color:#ffe9d2}
 body.hw #hwq .f{font-size:.85rem;color:#ff9a45;letter-spacing:.02em;display:flex;align-items:center;gap:8px}
 body.hw #hwq .rv{pointer-events:auto;font:inherit;font-size:.85rem;font-weight:700;padding:3px 12px;border-radius:999px;border:1px solid #ff9a45;background:rgba(255,122,26,.18);color:#ffe9d2;cursor:pointer;min-height:0;box-shadow:none}
-body.hw #hwq .mc{position:absolute;right:10px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;pointer-events:auto}
-body.hw #hwq .vol{width:64px;height:14px;margin:0;padding:0;min-height:0;accent-color:#ff7a1a;cursor:pointer}
-body.hw #hwq .mu{pointer-events:auto;font-size:1.25rem;line-height:1;min-height:0;padding:3px 5px;border-radius:8px;border:0;box-shadow:none;background:rgba(255,122,26,.18);cursor:pointer}
-body.hw #hwq .mu:hover{background:rgba(255,122,26,.4)}
 body.hw #hwq .rv:hover{background:rgba(255,122,26,.35)}
 body.hw #hwq.in{animation:hwqi .7s ease}
 body.hw{padding-top:96px}
@@ -816,6 +818,8 @@ function hwApply(){var on=hwOn();document.body.classList.toggle('hw',on);var f=d
   if(!on&&f)f.remove();
   var fb=document.getElementById('hwfb');if(on&&!fb){fb=document.createElement('div');fb.id='hwfb';fb.setAttribute('aria-hidden','true');fb.addEventListener('click',hwfbClick);hwfbBuild(fb);document.body.appendChild(fb)}
   if(!on&&fb)fb.remove();
+  if(on&&!window.hwpAuto){window.hwpAuto=1;if(!document.getElementById('hwp'))hwpToggle()}
+  var hm=document.getElementById('hwm');if(on&&!hm)hwmBuild();if(!on&&hm)hm.remove();
   var qe=document.getElementById('hwq');if(on&&!qe){qe=document.createElement('div');qe.id='hwq';qe.setAttribute('aria-live','off');document.body.appendChild(qe);hwqNext()}
   if(!on&&qe)qe.remove();var hp=document.getElementById('hwp');if(!on&&hp)hp.remove();
   var m=document.querySelector('meta[name=theme-color]');if(m)m.content=on?'#0c0612':'#0a0a14'}
@@ -835,17 +839,18 @@ function hwpCtl(k){if(!hwpOk)return;try{
   else if(k==='rand'){if(hwpNG)hwpList(true);else if(!hwpBonus())hwpRand()}}catch(e){}}
 function hwpToggle(){var p=document.getElementById('hwp');if(p){p.classList.toggle('on');return}
   p=document.createElement('div');p.id='hwp';
-  p.innerHTML='<div class="hwv"><div id="hwpf"></div></div><div class="hwc"><button type="button" data-k="next">⏭ Suivante</button><button type="button" class="pp" data-k="pp">⏸ Pause</button><button type="button" data-k="rand">🔀 Aléatoire</button></div><button type="button" class="x" aria-label="Masquer le lecteur (la musique continue)" title="Masquer le lecteur (la musique continue)">\u25BE Masquer</button>';
+  p.innerHTML='<div class="hwv"><div id="hwpf"></div></div><div class="hwc"><button type="button" data-k="next">⏭ Suivante</button><button type="button" class="pp" data-k="pp">\u25B6 Lecture</button><button type="button" data-k="rand">🔀 Aléatoire</button></div><button type="button" class="x" aria-label="Masquer le lecteur (la musique continue)" title="Masquer le lecteur (la musique continue)">\u25BE Masquer</button>';
   document.body.appendChild(p);p.classList.add('on');
   p.querySelectorAll('button[data-k]').forEach(function(b){b.onclick=function(){hwpCtl(b.dataset.k)}});
   p.querySelector('.x').onclick=function(){p.classList.remove('on')};
   hwpApi(function(){hwpP=new YT.Player('hwpf',{width:'100%',height:'100%',playerVars:{listType:'playlist',list:HWPL,autoplay:1,rel:0,playsinline:1},events:{onReady:function(){hwpOk=true;try{hwpP.setVolume(hwpVol)}catch(e){}try{hwpP.setShuffle(true)}catch(e){}setTimeout(hwpRand,1500)},onStateChange:hwpState}})})}
 var hwqI=-1,hwqT=0,hwqR=false;
-function hwqNext(){var e=document.getElementById('hwq');if(!e)return;var n;do{n=Math.floor(Math.random()*HWQ.length)}while(n===hwqI&&HWQ.length>1);hwqI=n;hwqT=Date.now();hwqR=false;e.innerHTML='';var mu=document.createElement('button');mu.type='button';mu.className='mu';mu.textContent='\uD83C\uDFB5';mu.title='Musiques de films d\u2019horreur';mu.setAttribute('aria-label','Ouvrir ou fermer la musique');mu.onclick=hwpToggle;var vr=document.createElement('input');vr.type='range';vr.min=0;vr.max=100;vr.value=hwpVol;vr.className='vol';vr.title='Volume';vr.setAttribute('aria-label','Volume de la musique');vr.oninput=function(){hwpVol=+this.value;try{if(hwpP&&hwpOk)hwpP.setVolume(hwpVol)}catch(x){}};var mc=document.createElement('div');mc.className='mc';mc.appendChild(mu);mc.appendChild(vr);e.appendChild(mc);var a=document.createElement('span');a.className='q';a.textContent='\u201c'+HWQ[n][0]+'\u201d';var b=document.createElement('span');b.className='f';e.appendChild(a);e.appendChild(b);e.classList.remove('in');void e.offsetWidth;e.classList.add('in');hwqDraw()}
+function hwmBuild(){var m=document.createElement('div');m.id='hwm';var mu=document.createElement('button');mu.type='button';mu.className='mu';mu.textContent='\uD83C\uDFB5';mu.title='Ouvrir ou fermer le lecteur';mu.setAttribute('aria-label','Ouvrir ou fermer le lecteur');mu.onclick=hwpToggle;var ic=document.createElement('span');ic.className='vi';ic.textContent='\uD83D\uDD0A';var vr=document.createElement('input');vr.type='range';vr.min=0;vr.max=100;vr.value=hwpVol;vr.className='vol';vr.title='Volume';vr.setAttribute('aria-label','Volume de la musique');vr.oninput=function(){hwpVol=+this.value;try{if(hwpP&&hwpOk)hwpP.setVolume(hwpVol)}catch(x){}};m.appendChild(mu);m.appendChild(ic);m.appendChild(vr);document.body.appendChild(m)}
+function hwqNext(){var e=document.getElementById('hwq');if(!e)return;var n;do{n=Math.floor(Math.random()*HWQ.length)}while(n===hwqI&&HWQ.length>1);hwqI=n;hwqT=Date.now();hwqR=false;e.innerHTML='';var a=document.createElement('span');a.className='q';a.textContent='\u201c'+HWQ[n][0]+'\u201d';var b=document.createElement('span');b.className='f';e.appendChild(a);e.appendChild(b);e.classList.remove('in');void e.offsetWidth;e.classList.add('in');hwqDraw()}
 function hwqDraw(){var e=document.getElementById('hwq');if(!e||hwqI<0)return;var t=(Date.now()-hwqT)/1000,f=e.querySelector('.f');if(!f)return;
   if(hwqR||t>=20){hwqR=true;if(f.dataset.m!=='r'){f.dataset.m='r';f.innerHTML='';f.textContent='\uD83C\uDFAC '+HWQ[hwqI][1]}return}
   var left=Math.ceil(20-t);if(f.dataset.m!=='c'){f.dataset.m='c';f.innerHTML='<span class="cd"></span> <button type="button" class="rv">Révéler le film</button>';f.querySelector('.rv').onclick=function(){hwqR=true;hwqDraw()}}
-  f.querySelector('.cd').textContent='\uD83C\uDFAC Quel film ? '+left+'\u00a0s'}
+  f.querySelector('.cd').textContent='\uD83C\uDFAC Quel film ou série ? '+left+'\u00a0s'}
 function hwqTick(){var e=document.getElementById('hwq');if(!e)return;if(hwqI<0||Date.now()-hwqT>=30000)hwqNext();else hwqDraw()}
 setInterval(hwqTick,1000);
 hwApply();setInterval(hwApply,60000);
