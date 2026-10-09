@@ -236,6 +236,7 @@ body.hw #hwm .vi{font-size:1rem;line-height:1}
 body.hw #hwm .vol{width:90px;height:14px;margin:0;padding:0;min-height:0;accent-color:#ff7a1a;cursor:pointer}
 #hwp{display:none}
 body.hw #hwp.on{order:1;display:block;position:relative;width:min(340px,calc(100vw - 28px));z-index:9;border-radius:12px;overflow:hidden;border:1px solid rgba(255,122,26,.4);background:#000;box-shadow:0 6px 24px rgba(0,0,0,.6)}
+#hwp .hwti{padding:6px 10px;font-size:.78rem;line-height:1.25;color:#ffe9d2;background:#14081c;min-height:1.25em;max-height:2.6em;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 #hwp .hwv{width:100%;aspect-ratio:16/9;background:#000}
 #hwp .hwv iframe{display:block;width:100%;height:100%;border:0}
 #hwp .hwc{display:flex;gap:6px;padding:6px;background:#14081c}
@@ -833,17 +834,21 @@ function hwpRand(){try{var n=(hwpP.getPlaylist()||[]).length;if(n>1)hwpP.playVid
 function hwpList(rand){if(!hwpOk)return;hwpNG=false;try{hwpP.loadPlaylist({list:HWPL,listType:'playlist',index:0});hwpP.setShuffle(true)}catch(e){}if(rand)setTimeout(hwpRand,1800)}
 function hwpExtra(x){if(!hwpOk)return;hwpNG=true;try{hwpP.loadVideoById(x.id)}catch(e){}}
 function hwpBonus(){var n=582;try{n=(hwpP.getPlaylist()||[]).length||582}catch(e){}if(Math.random()<HWX.length/(n+HWX.length)){hwpExtra(HWX[Math.floor(Math.random()*HWX.length)]);return true}return false}
-function hwpState(e){var b=document.querySelector('#hwp .pp');if(b)b.textContent=e.data===1?'⏸ Pause':'▶ Lecture';
+var hwpSk=0;
+function hwpLong(e){if(hwpNG||!hwpOk)return false;if(e.data!==1&&e.data!==3&&e.data!==5)return false;var d=0;try{d=hwpP.getDuration()||0}catch(x){}if(d>300&&hwpSk<40){hwpSk++;try{hwpP.nextVideo()}catch(x){}return true}if(d>0&&d<=300)hwpSk=0;return false}
+function hwpState(e){if(hwpLong(e))return;setTimeout(hwpTitle,600);var b=document.querySelector('#hwp .pp');if(b)b.textContent=e.data===1?'⏸ Pause':'▶ Lecture';
   if(e.data===0){if(hwpNG)hwpList(true);else hwpBonus()}}
 function hwpCtl(k){if(!hwpOk)return;try{
   if(k==='pp'){var st=hwpP.getPlayerState();if(st===1)hwpP.pauseVideo();else hwpP.playVideo()}
   else if(k==='next'){if(hwpNG)hwpList(false);else if(!hwpBonus())hwpP.nextVideo()}
   else if(k==='rand'){if(hwpNG)hwpList(true);else if(!hwpBonus())hwpRand()}}catch(e){}}
-function hwmLabel(){var p=document.getElementById('hwp'),b=document.querySelector('#hwm .mu');if(b)b.textContent=(p&&p.classList.contains('on'))?'\u25BE Masquer le lecteur':'\uD83C\uDFB5 Ouvrir le lecteur'}
+function hwmLabel(){var p=document.getElementById('hwp'),b=document.querySelector('#hwm .mu');if(b)b.textContent=(p&&p.classList.contains('on'))?'\u25BE Masquer \u00b7 Playlist horreur':'\uD83C\uDFB5 Ouvrir \u00b7 Playlist horreur'}
+function hwpTitle(){var t=document.getElementById('hwti');if(!t||!hwpP||!hwpOk)return;var v='';try{v=(hwpP.getVideoData()||{}).title||''}catch(e){}if(v&&t.textContent!==v){t.textContent=v;t.title=v}}
+setInterval(hwpTitle,1500);
 function hwpToggle(){hwpToggle0();hwmLabel()}
 function hwpToggle0(){var p=document.getElementById('hwp');if(p){p.classList.toggle('on');return}
   p=document.createElement('div');p.id='hwp';
-  p.innerHTML='<div class="hwv"><div id="hwpf"></div></div><div class="hwc"><button type="button" data-k="next">⏭ Suivante</button><button type="button" class="pp" data-k="pp">\u25B6 Lecture</button><button type="button" data-k="rand">🔀 Aléatoire</button></div>';
+  p.innerHTML='<div class="hwti" id="hwti">Playlist horreur</div><div class="hwv"><div id="hwpf"></div></div><div class="hwc"><button type="button" data-k="next">⏭ Suivante</button><button type="button" class="pp" data-k="pp">\u25B6 Lecture</button><button type="button" data-k="rand">🔀 Aléatoire</button></div>';
   hwDock().appendChild(p);p.classList.add('on');
   p.querySelectorAll('button[data-k]').forEach(function(b){b.onclick=function(){hwpCtl(b.dataset.k)}});
   hwpApi(function(){hwpP=new YT.Player('hwpf',{width:'100%',height:'100%',playerVars:{listType:'playlist',list:HWPL,autoplay:1,rel:0,playsinline:1},events:{onReady:function(){hwpOk=true;try{hwpP.setVolume(hwpVol)}catch(e){}try{hwpP.setShuffle(true)}catch(e){}setTimeout(hwpRand,1500)},onStateChange:hwpState}})})}
@@ -854,7 +859,7 @@ function hwqNext(){var e=document.getElementById('hwq');if(!e)return;var n;do{n=
 function hwqDraw(){var e=document.getElementById('hwq');if(!e||hwqI<0)return;var t=(Date.now()-hwqT)/1000,f=e.querySelector('.f');if(!f)return;
   if(hwqR||t>=20){hwqR=true;if(f.dataset.m!=='r'){f.dataset.m='r';f.innerHTML='';f.textContent='\uD83C\uDFAC '+HWQ[hwqI][1]}return}
   var left=Math.ceil(20-t);if(f.dataset.m!=='c'){f.dataset.m='c';f.innerHTML='<span class="cd"></span> <button type="button" class="rv">Révéler le film</button>';f.querySelector('.rv').onclick=function(){hwqR=true;hwqDraw()}}
-  f.querySelector('.cd').textContent='\uD83C\uDFAC Quel film ou série ? '+left+'\u00a0s'}
+  f.querySelector('.cd').textContent='\uD83C\uDFAC Quel film ou série d\u2019horreur ? '+left+'\u00a0s'}
 function hwqTick(){var e=document.getElementById('hwq');if(!e)return;if(hwqI<0||Date.now()-hwqT>=30000)hwqNext();else hwqDraw()}
 setInterval(hwqTick,1000);
 hwApply();setInterval(hwApply,60000);
