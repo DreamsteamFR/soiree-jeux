@@ -264,12 +264,31 @@ body.hw{padding-top:96px}
 .rkg{margin:14px 0 6px;font-weight:700;font-size:.9rem;color:var(--ink)}
 .rkp{margin:0 0 10px}.rkp b{color:var(--ink)}
 .foot #rkr{margin-right:6px}
+
+#newbtn{position:fixed;left:10px;top:calc(8px + env(safe-area-inset-top,0px));z-index:6;padding:6px 12px;font-size:.82rem;border-radius:999px;white-space:nowrap}
+#newbtn[hidden]{display:none}
+.nw{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px));background:rgba(5,5,12,.72);backdrop-filter:blur(6px);animation:inFade .2s ease}
+.nw[hidden]{display:none}
+.nwb{position:relative;width:100%;max-width:520px;max-height:100%;overflow-y:auto;background:#14132a;border:1.5px solid var(--line);border-radius:24px;padding:22px 20px 18px;box-shadow:0 30px 80px -20px rgba(0,0,0,.8),0 0 0 1px rgba(139,108,255,.25);animation:inPop .25s ease}
+.nwb h2{margin:0 36px 4px 0;font-size:1.3rem}.nwb>p{margin:0 0 14px;font-size:.9rem}
+.nwx{position:absolute;right:12px;top:12px;padding:6px 12px}
+.nwg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.nwc{display:flex;flex-direction:column;border:1.5px solid var(--line);border-radius:14px;overflow:hidden;background:rgba(255,255,255,.04)}
+.nwc .nwi{aspect-ratio:460/215;background:#0c0b1c;overflow:hidden}.nwc .nwi img{width:100%;height:100%;object-fit:cover;display:block}
+.nwc div.t{padding:7px 9px 8px}.nwc b{display:block;font-size:.84rem;line-height:1.2}.nwc small{color:var(--mut,#a9a6c8);font-size:.74rem}
+.nwf{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap}.nwf span{font-size:.82rem;opacity:.8}
+.nwf div{display:flex;gap:8px}
+@media(max-width:1239px){#newbtn{top:auto;bottom:calc(72px + env(safe-area-inset-bottom,0px));left:10px;z-index:10;box-shadow:0 10px 30px -6px rgba(139,108,255,.7)}}
+@media(max-width:420px){.nwg{grid-template-columns:1fr}}
+@media(min-width:1240px){.with-tr #tr{padding-top:calc(52px + env(safe-area-inset-top,0px))!important}}
 </style>
 </head>
 <body>
 <div class="shell" id="shell"><aside id="tr" aria-label="Jeux multi du moment"></aside><main id="app"></main></div>
 <aside id="sgp" aria-label="Suggestions personnalisées"></aside>
 <div id="trbk"></div><div id="fabs"><button id="trfab" hidden>🔥 Jeux du moment</button><button id="sgfab" hidden>✨ Suggestions</button></div>
+<button class="ghost" id="newbtn" hidden>🆕 Voir les derniers ajouts</button>
+<div class="nw" id="nw" hidden role="dialog" aria-modal="true" aria-labelledby="nwT"></div>
 <div class="intro" id="intro" hidden role="dialog" aria-modal="true" aria-labelledby="introT">
 <div class="ibox">
 <button class="ghost ix" id="introX" aria-label="Fermer">✕</button>
@@ -608,7 +627,7 @@ function trOpen(){document.getElementById('tr').classList.add('open');document.g
 function trSync(){
   var on=configured&&hasRawg&&joined&&room&&room.phase==='games';
   document.getElementById('shell').classList.toggle('with-tr',!!on);
-  document.getElementById('trfab').hidden=!on;
+  document.getElementById('trfab').hidden=!on;document.getElementById('newbtn').hidden=!on;
   document.getElementById('sgfab').hidden=!on;
   document.body.classList.toggle('with-sg',!!on);
   if(on)sgSync();
@@ -811,6 +830,25 @@ introEl.addEventListener('click',function(e){if(e.target===introEl)introClose()}
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!introEl.hidden){e.stopImmediatePropagation();introClose()}},true);
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-hlp]');if(b)introOpen()});
 if(!ld('sj3-intro'))introOpen();
+var NEWS_V='2026-10-18',NEWS_D='18 octobre',NEWS_IDS=[1203620,4078430,3010850,3393110,2288340,2929250,2949320,440310,3883570,2254990,5155360,2347080,4954910,3841510,4252340,3071240];
+var nwEl=document.getElementById('nw'),nwPrev=null;
+function nwOpen(){
+  var L=STEAM.filter(function(a){return NEWS_IDS.indexOf(a[1])>=0}).sort(function(a,b){return b[3]-a[3]||b[4]-a[4]}),top=L.slice(0,6),rest=L.length-top.length;
+  var pn=document.getElementById('shell').classList.contains('with-tr')&&!WIDE.matches;
+  nwEl.innerHTML='<div class="nwb"><button class="ghost nwx" id="nwX" aria-label="Fermer">✕</button><h2 id="nwT">🆕 Nouveaux jeux ajoutés</h2><p>Mise à jour du '+NEWS_D+' des listes « Jeux multi du moment ».</p><div class="nwg">'+top.map(function(a){
+    var x={i:SIMG[a[1]]?'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/'+a[1]+'/'+SIMG[a[1]]:''};
+    return'<div class="nwc"><div class="nwi">'+(x.i?imgTag(x,460,215):'')+'</div><div class="t"><b>'+esc(a[0])+'</b><small>'+esc(a[5].split(',').join(' · '))+(a[5]?' · ':'')+a[3]+' %</small></div></div>'}).join('')+'</div><div class="nwf"><span>'+(rest>0?'+ '+rest+' autres dans la liste':'')+'</span><div>'+(pn?'<button class="ghost" id="nwL">Voir la liste</button>':'')+'<button id="nwOk">OK</button></div></div></div>';
+  nwPrev=document.activeElement;nwEl.hidden=false;
+  document.getElementById('nwX').onclick=nwClose;document.getElementById('nwOk').onclick=nwClose;
+  var l=document.getElementById('nwL');if(l)l.onclick=function(){nwClose();trOpen()};
+  document.getElementById('nwOk').focus();
+}
+function nwClose(){if(nwEl.hidden)return;nwEl.hidden=true;if(nwPrev&&nwPrev.focus)try{nwPrev.focus()}catch(e){}}
+nwEl.addEventListener('click',function(e){if(e.target===nwEl)nwClose()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!nwEl.hidden){e.stopImmediatePropagation();nwClose()}},true);
+document.getElementById('newbtn').onclick=nwOpen;
+function nwAuto(){var s=ld('sj3-news');if(!s||s.v!==NEWS_V)s={v:NEWS_V,n:0};if(s.n>=3)return;s.n++;sv('sj3-news',s);nwOpen()}
+if(introEl.hidden)nwAuto();else{var _ic=introClose;introClose=function(){var w=!introEl.hidden;_ic();if(w)nwAuto()};document.getElementById('introX').onclick=introClose;document.getElementById('introGo').onclick=introClose}
 
 try{localStorage.removeItem('sj3-hist')}catch(e){}
 render();
