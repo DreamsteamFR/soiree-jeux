@@ -299,9 +299,9 @@ body.hw{padding-top:96px}
 </head>
 <body>
 <div class="shell" id="shell"><aside id="tr" aria-label="Jeux multi du moment"></aside><main id="app"></main></div>
-<aside id="sgp" aria-label="Suggestions personnalisées"></aside>
-<button class="ghost" id="sgshow" hidden>✨ Afficher les suggestions</button>
-<div id="trbk"></div><div id="fabs"><button id="trfab" hidden>🔥 Jeux du moment</button><button id="sgfab" hidden>✨ Suggestions</button></div>
+<aside id="sgp" aria-label="Mes jeux des soirées précédentes"></aside>
+<button class="ghost" id="sgshow" hidden>🕘 Afficher mes jeux précédents</button>
+<div id="trbk"></div><div id="fabs"><button id="trfab" hidden>🔥 Jeux du moment</button><button id="sgfab" hidden>🕘 Mes jeux</button></div>
 <button class="ghost" id="newbtn" hidden>🆕 Voir les derniers ajouts</button>
 <div class="nw" id="nw" hidden role="dialog" aria-modal="true" aria-labelledby="nwT"></div>
 <div class="intro" id="intro" hidden role="dialog" aria-modal="true" aria-labelledby="introT">
@@ -346,7 +346,12 @@ function mcBadge(v,pre){var c=v>=75?'#66cc33':v>=50?'#ffcc33':'#ff5566';return'<
 function thumb(u,w,h){return String(u).replace('/media/games/','/media/crop/'+w+'/'+h+'/games/').replace(/["\'<>\s]/g,'')}
 function bgStyle(g){var h='hsl('+hue(g.k)+',62%,40%)';if(!g.img)return'background:'+h;return'background:linear-gradient(to top,rgba(10,6,40,.92),rgba(10,6,40,.1) 70%),url(\''+thumb(g.img,600,400)+'\') center/cover,'+h}
 function pick(s){return{n:s.n,r:s.r,m:s.m,i:s.i,gn:s.gn,y:s.y}}
-function addG(o){var m=mine();if(!m)return;var g=m.round===rnd()?m.games:[],k=gkey(o);if(g.some(function(x){return gkey(x)===k}))return;wr({games:g.concat([o]),ready:false})}
+function addG(o){var m=mine();if(!m)return;var g=m.round===rnd()?m.games:[],k=gkey(o);if(g.some(function(x){return gkey(x)===k}))return;histAdd(o);wr({games:g.concat([o]),ready:false})}
+/* ===== Historique personnel des jeux proposés (stocké dans ce navigateur, 50 jeux max) ===== */
+var HIST_K='sj3-hist2',HIST_MAX=50;
+function histGet(){var h=ld(HIST_K);return Array.isArray(h)?h.filter(function(x){return x&&x.n}):[]}
+function histAdd(o){try{var k=nrm(o.n),h=histGet().filter(function(x){return nrm(x.n)!==k}),e={n:o.n,t:Date.now()};['r','m','i','gn','y'].forEach(function(f){if(o[f])e[f]=o[f]});h.unshift(e);sv(HIST_K,h.slice(0,HIST_MAX))}catch(e){}}
+function histDel(k){sv(HIST_K,histGet().filter(function(x){return nrm(x.n)!==k}));sgSig='';sgSync()}
 var curQ='',sugsR=[];
 function mix(q){
   var m=mine(),have={};((m&&m.round===rnd())?m.games:[]).forEach(function(x){have[gkey(x)]=1});
@@ -652,8 +657,8 @@ function trLoad(){
 function mineKeys(){var m=mine();return m&&m.round===rnd()?m.games.map(gkey).join('|'):''}
 function trClose(){var t=document.getElementById('tr'),b=document.getElementById('trbk'),q=document.getElementById('sgp');if(t)t.classList.remove('open');if(q)q.classList.remove('open');if(b)b.classList.remove('show')}
 function trOpen(){document.getElementById('tr').classList.add('open');document.getElementById('trbk').classList.add('show')}
-var sgShow=ld('sj3-sgshow')===true;
-function sgSet(v){sgShow=v;sv('sj3-sgshow',v);trSync()}
+var sgShow=ld('sj3-hshow')!==false;
+function sgSet(v){sgShow=v;sv('sj3-hshow',v);trSync()}
 document.getElementById('sgshow').onclick=function(){sgSet(true)};
 function trSync(){
   var on=configured&&hasRawg&&joined&&room&&room.phase==='games';
@@ -715,108 +720,28 @@ function trRender(){
 if(WIDE.addEventListener)WIDE.addEventListener('change',function(){trSig='';trSync()});
 document.getElementById('trfab').onclick=trOpen;
 
-/* ===== Suggestions personnalisées (colonne de droite) ===== */
-var SGT={'survival':'Survie','crafting':'Craft','open-world':'Monde ouvert','horror':'Horreur','psychological-horror':'Horreur','survival-horror':'Horreur','roguelike':'Roguelike','roguelite':'Roguelite','pvp':'JcJ','battle-royale':'Battle royale','fps':'FPS','third-person-shooter':'TPS','sandbox':'Bac à sable','building':'Construction','base-building':'Construction','exploration':'Exploration','fantasy':'Fantasy','sci-fi':'Science-fiction','zombies':'Zombies','racing':'Course','sports':'Sport','football':'Foot','basketball':'Basket','tactical':'Tactique','party':'Party','party-game':'Party','physics':'Physique','funny':'Humour','comedy':'Humour','dungeon-crawler':'Dungeon crawler','loot':'Loot','hack-and-slash':'Hack and slash','automation':'Automatisation','management':'Gestion','vikings':'Vikings','viking':'Vikings','pirates':'Pirates','space':'Espace','post-apocalyptic':'Post-apo','investigation':'Enquête','detective':'Enquête','card-game':'Cartes','deckbuilding':'Deckbuilding','fighting':'Combat','platformer':'Plateforme','cooking':'Cuisine','farming':'Ferme','fishing':'Pêche','hunting':'Chasse','escape-room':'Escape game','mystery':'Mystère','heist':'Braquage','stealth':'Infiltration','extraction-shooter':'Extraction','looter-shooter':'Looter shooter','team-based':'En équipe','moba':'MOBA','rts':'STR','turn-based-strategy':'Tour par tour','city-builder':'City builder','driving':'Conduite','cars':'Voitures','medieval':'Médiéval','military':'Militaire','war':'Guerre','tower-defense':'Tower defense','mech':'Mechas','monsters':'Monstres','dragons':'Dragons','magic':'Magie','trivia':'Quiz','word-game':'Mots','drawing':'Dessin','social-deduction':'Déduction','asymmetric-multiplayer':'Asymétrique','souls-like':'Souls-like','action-rpg':'Action-RPG','looter':'Loot','sailing':'Navigation','underwater':'Sous-marin','cozy':'Cosy','cute':'Mignon','co-op-campaign':'Campagne coop','split-screen':'Écran partagé','local-co-op':'Coop locale','minigames':'Mini-jeux','social-deduction':'Déduction','deception':'Bluff','trivia':'Quiz','board-game':'Jeu de plateau','golf':'Golf','music':'Musique','rhythm':'Rythme','arena-shooter':'Arène','hero-shooter':'Hero shooter','metroidvania':'Metroidvania','beat-em-up':'Beat them up','shoot-em-up':'Shoot them up','twin-stick-shooter':'Twin stick','mmorpg':'MMORPG','racing-2':'Course'};
-var SGTH=['minigames','space','sci-fi','fantasy','medieval','pirates','vikings','viking','zombies','dragons','magic','military','war','post-apocalyptic','monsters','mech','underwater','cute','cozy','funny','comedy','cars','sailing','spaceship'];
-var SGG={'action':'Action','adventure':'Aventure','role-playing-games-rpg':'RPG','shooter':'Tir','strategy':'Stratégie','puzzle':'Puzzle','racing':'Course','sports':'Sport','simulation':'Simulation','fighting':'Combat','platformer':'Plateforme','arcade':'Arcade','massively-multiplayer':'MMO','board-games':'Jeu de plateau','card':'Cartes','family':'Famille'};
-var SGMP=['multiplayer','co-op','cooperative','coop','online-co-op','local-co-op','online-multiplayer','local-multiplayer','pvp','online-pvp','split-screen','mmo','battle-royale','team-based','asymmetric-multiplayer','co-op-campaign'];
-var sgInfo={},sgSig='',sgInf={},sgDsc={},sgSeq=0;
+/* ===== Mes jeux des soirées précédentes (colonne de droite, remplace les suggestions) ===== */
+var sgSig='';
 function sgOpen(){document.getElementById('sgp').classList.add('open');document.getElementById('trbk').classList.add('show')}
 function sgMine(){var m=mine();return(m&&m.round===rnd())?m.games:[]}
-function sgSl(a){return(a||[]).map(function(t){return t.slug})}
-function sgApi(q){return fetch('https://api.rawg.io/api/'+q+(q.indexOf('?')<0?'?':'&')+'key='+encodeURIComponent(RAWG_KEY)).then(function(r){if(!r.ok)throw 0;return r.json()})}
-function sgUpd(){sgSig='';sgSync()}
-var SGFR={'survie':['t','survival'],'horreur':['t','horror'],'party':['t','party-game'],'coop':['c','co-op'],'tir':['g','shooter'],'strategie':['g','strategy'],'simulation':['g','simulation'],'action':['g','action'],'aventure':['g','adventure'],'rpg':['g','role-playing-games-rpg'],'sport':['g','sports'],'course':['g','racing'],'puzzle':['g','puzzle'],'combat':['g','fighting']};
-var SGCO=['co-op','cooperative','coop','online-co-op','local-co-op','co-op-campaign'];
-function sgStart(x){
-  var k=gkey(x);if(sgInfo[k])return;var o=sgInfo[k]={st:'load',seq:++sgSeq,picks:null};
-  setTimeout(function(){if(o.st==='load'){o.st='err';sgUpd()}},15000);
-  function feats(d){
-    var tg=[],th=[],gn=[],co=false,solo=!d;
-    if(d){solo=sgSl(d.tags).indexOf('singleplayer')>=0;sgSl(d.genres).forEach(function(s){if(SGG[s]&&gn.indexOf(s)<0)gn.push(s)});
-      sgSl(d.tags).forEach(function(s){if(SGCO.indexOf(s)>=0)co=true;if(!SGT[s]||SGMP.indexOf(s)>=0)return;var L=SGTH.indexOf(s)>=0?th:tg;if(L.indexOf(s)<0)L.push(s)})}
-    String(x.gn||'').split(',').forEach(function(w){
-      var f=SGFR[w.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')];if(!f)return;
-      if(f[0]==='t'&&tg.indexOf(f[1])<0)tg.push(f[1]);else if(f[0]==='g'&&gn.indexOf(f[1])<0)gn.push(f[1]);else if(f[0]==='c')co=true});
-    return{tg:tg,th:th,gn:gn,co:co,solo:solo,sid:d&&d.id||0};
-  }
-  function search(F){
-    var tg=F.tg,th=F.th,gn=F.gn,q;
-    if(tg.length)q='tags='+tg.slice(0,3).join(',');
-    else if(gn.length)q='genres='+gn.slice(0,2).join(',')+(F.co?'&tags=co-op':'');
-    else if(F.co)q='tags=co-op';
-    else if(th.length)q='tags='+th.slice(0,2).join(',');
-    else{o.st='none';sgUpd();return}
-    var max=tg.length*3+th.length+gn.length+(F.co?1:0),need=max>=2?2:1;
-    var q2=(tg.length&&(gn.length||F.co))?(gn.length?'genres='+gn.slice(0,2).join(',')+(F.co?'&tags=co-op':''):'tags=co-op'):'';
-    function score(list){return list.filter(function(c){return c.id!==F.sid&&nrm(c.name)!==nrm(x.n)}).map(function(c){
-        var ct=sgSl(c.tags),cg=sgSl(c.genres),why=[];
-        var mp=ct.some(function(s){return SGMP.indexOf(s)>=0})||cg.indexOf('massively-multiplayer')>=0;
-        var cco=ct.some(function(s){return SGCO.indexOf(s)>=0});
-        var st=tg.filter(function(s){return ct.indexOf(s)>=0}),sth=th.filter(function(s){return ct.indexOf(s)>=0}),sg=gn.filter(function(s){return cg.indexOf(s)>=0});
-        st.map(function(s){return SGT[s]}).concat(F.co&&cco?['Coop']:[],sg.map(function(s){return SGG[s]}),sth.map(function(s){return SGT[s]})).forEach(function(w){if(why.indexOf(w)<0)why.push(w)});
-        var sc=st.length*3+sth.length+sg.length+(F.co&&cco?1:0)-(!F.solo&&ct.indexOf('singleplayer')>=0?2:0);
-        return{mp:mp,sc:sc,why:why.slice(0,3),add:c.added||0,rc:c.ratings_count||0,rt:c.rating||0,
-          g:{n:c.name,r:c.id,m:c.metacritic||null,i:c.background_image||null,y:(c.released||'').slice(0,4),gn:(c.genres||[]).slice(0,3).map(function(t){return t.name}).join(', ')}}
-      }).filter(function(c){return c.mp&&c.sc>=need&&c.rc>=20&&!/soundtrack|season pass|\bdlc\b|\bdemo\b|expansion|\(\+18\)/i.test(c.g.n)})}
-    function fin(all){var seen={};o.cands=all.filter(function(c){if(seen[c.g.r])return false;seen[c.g.r]=1;return true}).sort(function(a,b){return b.sc-a.sc||b.add-a.add});o.st='ok';sgUpd()}
-    return sgApi('games?'+q+'&ordering=-added&page_size=40&exclude_additions=true').then(function(r){
-      var c1=score(r.results||[]);
-      if(c1.length>=6||!q2)return fin(c1);
-      return sgApi('games?'+q2+'&ordering=-added&page_size=40&exclude_additions=true').then(function(r2){fin(c1.concat(score(r2.results||[])))},function(){fin(c1)});
-    });
-  }
-  function go(id){
-    if(o.st!=='load'||o.go)return;o.go=1;
-    var p=id?sgApi('games/'+encodeURIComponent(id)).then(function(d){return feats(d)},function(){return feats(null)}):Promise.resolve(feats(null));
-    p.then(search).catch(function(){o.st='err';sgUpd()});
-  }
-  if(x.r)go(x.r);
-  else{var t=setTimeout(function(){go(0)},5000);rawgByName(x.n,function(id){clearTimeout(t);go(id)})}
-}
-function sgHas(l,g){var n=nrm(g.n);return l.some(function(x){return(x.r&&x.r===g.r)||nrm(x.n)===n})}
-function sgFreeze(l){
-  var used={};Object.keys(sgInfo).forEach(function(k){(sgInfo[k].picks||[]).forEach(function(c){used[c.g.r]=1})});
-  l.forEach(function(x){var o=sgInfo[gkey(x)];if(!o||o.st!=='ok'||o.picks)return;
-    o.picks=[];o.cands.some(function(c){if(used[c.g.r]||sgHas(l,c.g))return false;used[c.g.r]=1;o.picks.push(c);return o.picks.length>=3})});
-}
 function sgSync(){
   var p=document.getElementById('sgp');if(!p)return;
-  var l=sgMine(),ks={};l.forEach(function(x){ks[gkey(x)]=1});
-  Object.keys(sgInfo).forEach(function(k){if(!ks[k])delete sgInfo[k]});
-  if(hasRawg)l.forEach(sgStart);
-  sgFreeze(l);
-  var sig=JSON.stringify([l.map(function(x){return[gkey(x),x.n]}),Object.keys(sgInfo).map(function(k){return[k,sgInfo[k].st,(sgInfo[k].picks||[]).length]}),sgInf,Object.keys(sgDsc).length,WIDE.matches]);
+  var g=sgMine(),have={};g.forEach(function(x){have[nrm(x.n)]=1});
+  var all=histGet(),l=all.filter(function(x){return!have[nrm(x.n)]});
+  var sig=JSON.stringify([all.map(function(x){return x.n}),l.map(function(x){return x.n}),WIDE.matches]);
   if(sig===sgSig)return;sgSig=sig;
   var lst=p.querySelector('.sgl'),st=p.scrollTop,ls=lst?lst.scrollTop:0;
-  var h='<div class="trh"><h2>✨ Suggestions personnalisées</h2><button class="ghost" id="sgh">Masquer</button><button class="ghost" id="sgx" aria-label="Fermer">✕</button></div>';
-  if(!l.length)h+='<p class="sgempty">Ajoute un jeu au pool pour voir tes suggestions</p>';
-  else{
-    var bl=l.slice().reverse().map(function(x){
-      var o=sgInfo[gkey(x)];if(!o)return'';
-      var top='<section class="grpb"><h3>Parce que tu as ajouté <b>'+esc(x.n)+'</b></h3>';
-      if(o.st==='load')return top+'<p class="emp">Recherche de suggestions…</p></section>';
-      if(o.st==='err')return top+'<p class="emp">Suggestions indisponibles pour ce jeu.</p></section>';
-      if(o.st==='none'||(o.st==='ok'&&!o.cands.length))return top+'<p class="emp">Pas assez d’infos sur ce jeu pour trouver des suggestions.</p></section>';
-      if(o.st!=='ok'||!o.picks||!o.picks.length)return'';
-      return top+'<div class="row3">'+o.picks.map(function(c){
-        var g=c.g,ad=sgHas(l,g),op=sgInf[g.r],t=sgDsc[g.r];
-        return'<div class="mc2"><div class="ti2'+(g.i?'':' ph')+'" data-i="'+esc(g.n.charAt(0).toUpperCase())+'" style="background:hsl('+hue(g.n)+',55%,32%)">'+(g.i?imgTag({i:g.i},320,180):'')+
-          (c.rt?'<span class="rtb">⭐ '+c.rt.toFixed(1).replace('.',',')+'</span>':'')+'<button type="button" class="inf'+(op?' on':'')+'" data-si="'+g.r+'" aria-expanded="'+(op?'true':'false')+'">ⓘ Infos</button></div>'+
-          '<b>'+esc(g.n)+'</b><small>'+esc([g.gn,g.y].filter(Boolean).join(' · ')||'Multijoueur')+'</small>'+(c.why.length?'<small class="why">'+esc(c.why.join(' · '))+'</small>':'')+
-          (op?'<p class="dsc">'+esc(t===undefined?'Chargement…':(t||'Pas de description disponible.'))+'</p>':'')+
-          '<button data-sa="'+g.r+'"'+(ad?' disabled':'')+'>'+(ad?'Ajouté ✓':'+ Ajouter')+'</button></div>'}).join('')+'</div></section>';
-    }).join('');
-    h+='<p class="cdesc">Des idées proches des jeux de ta liste.</p><div class="sgl">'+(bl||'<p class="emp">Aucune suggestion trouvée pour tes jeux pour l’instant.</p>')+'</div>';
-  }
+  var h='<div class="trh"><h2>🕘 Mes jeux des soirées précédentes</h2><button class="ghost" id="sgh">Masquer</button><button class="ghost" id="sgx" aria-label="Fermer">✕</button></div>';
+  if(!all.length)h+='<p class="sgempty">Les jeux que tu proposes seront gardés ici, sur cet appareil, pour les prochaines soirées.</p>';
+  else if(!l.length)h+='<p class="sgempty">Tous les jeux de ton historique sont déjà dans ta liste.</p>';
+  else h+='<p class="cdesc">'+l.length+' jeu'+(l.length>1?'x':'')+' · ajoute seulement ceux que tu veux reproposer. Visible par toi seul.</p><div class="sgl"><div class="row3">'+l.map(function(x){var k=nrm(x.n);
+    return'<div class="mc2"><div class="ti2'+(x.i?'':' ph')+'" data-i="'+esc(String(x.n).charAt(0).toUpperCase())+'" style="background:hsl('+hue(x.n)+',55%,32%)">'+(x.i?imgTag({i:x.i},320,180):'')+
+      '<button type="button" class="inf" data-hx="'+esc(k)+'" aria-label="Retirer '+esc(x.n)+' de l’historique" title="Retirer de l’historique">✕</button></div>'+
+      '<b>'+esc(x.n)+'</b><small>'+esc([x.gn,x.y].filter(Boolean).join(' · ')||'Ajouté à la main')+'</small><button data-ha="'+esc(k)+'">+ Ajouter</button></div>'}).join('')+'</div></div>';
   p.innerHTML=h;p.scrollTop=st;lst=p.querySelector('.sgl');if(lst)lst.scrollTop=ls;
   var x=document.getElementById('sgx');if(x)x.onclick=trClose;x=document.getElementById('sgh');if(x)x.onclick=function(){sgSet(false)};
-  function find(r){var f=null;Object.keys(sgInfo).forEach(function(k){(sgInfo[k].picks||[]).forEach(function(c){if(String(c.g.r)===String(r))f=c.g})});return f}
-  p.querySelectorAll('[data-si]').forEach(function(b){b.onclick=function(e){e.preventDefault();e.stopPropagation();var r=b.dataset.si;sgInf[r]=!sgInf[r];
-    if(sgInf[r]&&sgDsc[r]===undefined){var done=false;function fin(t){if(done)return;done=true;sgDsc[r]=t||'';sgUpd()}
-      setTimeout(function(){fin('')},8000);getDesc(r,function(o){fin(o.d||'')})}
-    sgUpd()}});
-  p.querySelectorAll('[data-sa]').forEach(function(b){b.onclick=function(){var g=find(b.dataset.sa);if(!g)return;sfx('add');addG(pick(g))}});
+  p.querySelectorAll('[data-ha]').forEach(function(b){b.onclick=function(){var e=histGet().filter(function(z){return nrm(z.n)===b.dataset.ha})[0];if(!e)return;var o={n:e.n};['r','m','i','gn','y'].forEach(function(f){if(e[f])o[f]=e[f]});sfx('add');addG(o)}});
+  p.querySelectorAll('[data-hx]').forEach(function(b){b.onclick=function(ev){ev.preventDefault();ev.stopPropagation();histDel(b.dataset.hx)}});
 }
 document.getElementById('sgfab').onclick=sgOpen;
 document.getElementById('trbk').onclick=trClose;
